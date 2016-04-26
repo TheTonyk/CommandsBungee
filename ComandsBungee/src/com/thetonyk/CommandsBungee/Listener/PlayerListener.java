@@ -255,10 +255,8 @@ public class PlayerListener implements Listener {
 		}
 		
 		text.append(ChatColor.translateAlternateColorCodes('§', "§7."));
-				
-		for (ProxiedPlayer player : Main.proxy.getProxy().getPlayers()) {
-			
-			if (player.getServer() != event.getPlayer().getServer()) continue;
+		
+		for (ProxiedPlayer player : event.getServer().getInfo().getPlayers()) {
 			
 			if (!player.hasPermission("proxy.alerts")) continue;
 	
