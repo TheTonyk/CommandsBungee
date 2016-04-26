@@ -1,0 +1,67 @@
+name: CommandsBungee
+main: com.thetonyk.CommandsBungee.Main
+version: 0.1
+author: TheTonyk
+description: BungeeCord plugin for CommandsPVP by TheTonyk.
+prefix: Bungee
+
+commands:
+    msg:
+        description: Send private messages
+        usage: /msg
+        aliases: [tell, w]
+    reply:
+        description: Reply yo private messages
+        usage: /reply
+        aliases: [r]
+    about:
+        description: About the plugin
+        usage: /about
+    gbroadcast:
+        description: Broadcast a message
+        usage: /gbroadcast
+        aliases: [gbc]
+    broadcast:
+        description: Broadcast a message
+        usage: /broadcast
+        aliases: [bc]
+    ping:
+        description: See your ping
+        usage: /ping
+        aliases: [ms]
+    info:
+        description: See infos about players
+        usage: /info
+        aliases: [i]
+    cmdspy:
+        description: Toggle the commands spy
+        usage: /cmdspy
+        aliases: [spy]
+    ban:
+        description: Ban a player
+        usage: /ban
+    unban:
+        description: Cancel a ban
+        usage: /unban
+    kick:
+        description: Kick a player
+        usage: /kick
+    mute:
+        description: Mute a player
+        usage: /mute
+    unmute:
+        description: Cancel a mute
+        usage: /unmute
+    private:
+        description: Talk in staff chat
+        usage: /private
+        aliases: [p]
+    organize:
+        description: Talk in organize chat
+        usage: /organize
+        aliases: [o]
+    hub:
+        description: Teleport back to the hub
+        usage: /hub
+        aliases: [lobby]
+        
