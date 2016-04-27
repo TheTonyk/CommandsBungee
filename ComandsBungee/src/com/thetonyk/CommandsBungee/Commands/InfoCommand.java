@@ -140,16 +140,17 @@ public class InfoCommand extends Command implements TabExecutor {
 		
 		for (String[] ban : PlayerUtils.getAllBans(uuid)) {
 				
-				ComponentBuilder text = new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸   §6Ban §8| §7"));
-				text.append(ChatColor.translateAlternateColorCodes('§', format.format(Long.parseLong(ban[0]))));
+				ComponentBuilder text = new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸   §6Ban §8| "));
+				text.append(ChatColor.translateAlternateColorCodes('§', "§7" + format.format(Long.parseLong(ban[0]))));
 				text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§7Banned by §a" + PlayerUtils.getName(Integer.parseInt(ban[3])))).create()));
-				text.append(ChatColor.translateAlternateColorCodes('§', " §8| §a "));
-				text.append(ChatColor.translateAlternateColorCodes('§', BanCommand.Reasons.valueOf(ban[2].toUpperCase()).getShortName()));
+				text.append(ChatColor.translateAlternateColorCodes('§', " §8| "));
+				text.append(ChatColor.translateAlternateColorCodes('§', "§a" + BanCommand.Reasons.valueOf(ban[2].toUpperCase()).getShortName()));
 				text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a" + BanCommand.Reasons.valueOf(ban[2].toUpperCase()).getName())).create()));
-				text.append(ChatColor.translateAlternateColorCodes('§', " §8| §7 " + ((Long.parseLong(ban[1]) == -1 ? "Lifetime" : formatShort.format(Long.parseLong(ban[0]) + Long.parseLong(ban[1]))))));
+				text.append(ChatColor.translateAlternateColorCodes('§', " §8| §7" + ((Long.parseLong(ban[1]) == -1 ? "Lifetime" : formatShort.format(Long.parseLong(ban[0]) + Long.parseLong(ban[1]))))));
 				
 				if (PlayerUtils.getRank(sender.getName()) == Rank.ADMIN) {
 					
+					text.append(ChatColor.translateAlternateColorCodes('§', " §8| "));
 					text.append(ChatColor.translateAlternateColorCodes('§', (PlayerUtils.getCanceledBan(PlayerUtils.getBanId(Long.parseLong(ban[0]), name)) == 0 ? "§c" : "§7§o") + "Cancel"));
 					text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', (PlayerUtils.getCanceledBan(PlayerUtils.getBanId(Long.parseLong(ban[0]), name)) == 0 ? "§7Cancel the ban" : "§7Canceled by §a" + PlayerUtils.getName(PlayerUtils.getCanceledBan(PlayerUtils.getBanId(Long.parseLong(ban[0]), name)))))).create()));
 					if (PlayerUtils.getCanceledBan(PlayerUtils.getBanId(Long.parseLong(ban[0]), name)) == 0) text.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unban " + PlayerUtils.getBanId(Long.parseLong(ban[0]), name)));
@@ -162,11 +163,11 @@ public class InfoCommand extends Command implements TabExecutor {
 			
 		for (String[] kick : PlayerUtils.getAllKick(uuid)) {
 			
-			ComponentBuilder text = new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸   §6Kick §8| §7"));
-			text.append(ChatColor.translateAlternateColorCodes('§', format.format(Long.parseLong(kick[0]))));
+			ComponentBuilder text = new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸   §6Kick §8| "));
+			text.append(ChatColor.translateAlternateColorCodes('§', "§7" + format.format(Long.parseLong(kick[0]))));
 			text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§7Kicked by §a" + PlayerUtils.getName(Integer.parseInt(kick[2])))).create()));
-			text.append(ChatColor.translateAlternateColorCodes('§', " §8| §a "));
-			text.append(ChatColor.translateAlternateColorCodes('§', KickCommand.Reasons.valueOf(kick[1].toUpperCase()).getShortName()));
+			text.append(ChatColor.translateAlternateColorCodes('§', " §8| "));
+			text.append(ChatColor.translateAlternateColorCodes('§', "§a" + KickCommand.Reasons.valueOf(kick[1].toUpperCase()).getShortName()));
 			text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a" + KickCommand.Reasons.valueOf(kick[1].toUpperCase()).getName())).create()));
 			
 			sender.sendMessage(text.create());
@@ -175,16 +176,17 @@ public class InfoCommand extends Command implements TabExecutor {
 		
 		for (String[] mute : PlayerUtils.getAllMute(uuid)) {
 			
-			ComponentBuilder text = new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸   §6Mute §8| §7"));
-			text.append(ChatColor.translateAlternateColorCodes('§', format.format(Long.parseLong(mute[0]))));
+			ComponentBuilder text = new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸   §6Mute §8| "));
+			text.append(ChatColor.translateAlternateColorCodes('§', "§7" + format.format(Long.parseLong(mute[0]))));
 			text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§7Muted by §a" + PlayerUtils.getName(Integer.parseInt(mute[3])))).create()));
-			text.append(ChatColor.translateAlternateColorCodes('§', " §8| §a "));
-			text.append(ChatColor.translateAlternateColorCodes('§', MuteCommand.Reasons.valueOf(mute[2].toUpperCase()).getShortName()));
+			text.append(ChatColor.translateAlternateColorCodes('§', " §8| "));
+			text.append(ChatColor.translateAlternateColorCodes('§', "§a" + MuteCommand.Reasons.valueOf(mute[2].toUpperCase()).getShortName()));
 			text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a" + MuteCommand.Reasons.valueOf(mute[2].toUpperCase()).getName())).create()));
-			text.append(ChatColor.translateAlternateColorCodes('§', " §8| §7 " + formatShort.format(Long.parseLong(mute[0]) + Long.parseLong(mute[1]))));
+			text.append(ChatColor.translateAlternateColorCodes('§', " §8| §7" + formatShort.format(Long.parseLong(mute[0]) + Long.parseLong(mute[1]))));
 			
 			if (PlayerUtils.getRank(sender.getName()) == Rank.ADMIN) {
 				
+				text.append(ChatColor.translateAlternateColorCodes('§', " §8| "));
 				text.append(ChatColor.translateAlternateColorCodes('§', (PlayerUtils.getCanceledMute(PlayerUtils.getMuteId(Long.parseLong(mute[0]), name)) == 0 ? "§c" : "§7§o") + "Cancel"));
 				text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', (PlayerUtils.getCanceledMute(PlayerUtils.getMuteId(Long.parseLong(mute[0]), name)) == 0 ? "§7Cancel the mute" : "§7Canceled by §a" + PlayerUtils.getName(PlayerUtils.getCanceledMute(PlayerUtils.getMuteId(Long.parseLong(mute[0]), name)))))).create()));
 				if (PlayerUtils.getCanceledMute(PlayerUtils.getMuteId(Long.parseLong(mute[0]), name)) == 0) text.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unmute " + PlayerUtils.getMuteId(Long.parseLong(mute[0]), name)));

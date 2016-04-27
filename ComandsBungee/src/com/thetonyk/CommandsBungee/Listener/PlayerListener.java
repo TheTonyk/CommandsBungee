@@ -250,7 +250,7 @@ public class PlayerListener implements Listener {
 			text.append(ChatColor.translateAlternateColorCodes('§', "§a" + alts.keySet().toArray()[i]));
 			text.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/info " + alts.keySet().toArray()[i]));
 			
-			if (i > 0 && i < (alts.keySet().size() - 1)) text.append(ChatColor.translateAlternateColorCodes('§', " §7, "));
+			if (alts.keySet().size() > 1 && i < (alts.keySet().size() - 1)) text.append(ChatColor.translateAlternateColorCodes('§', "§7, "));
 			
 		}
 		
