@@ -23,6 +23,8 @@ import com.thetonyk.CommandsBungee.Commands.UnmuteCommand;
 import com.thetonyk.CommandsBungee.Listener.MessengerListener;
 import com.thetonyk.CommandsBungee.Listener.PlayerListener;
 
+import static net.md_5.bungee.api.ChatColor.*;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -70,6 +72,12 @@ public class Main extends Plugin {
 		getLogger().info("CommandsPVP BungeeCord Plugin has been disabled.");
 		
 		proxy = null;
+		
+	}
+	
+	public static ComponentBuilder prefix() {
+		
+		return new ComponentBuilder("Global ").color(GREEN).bold(true).append("⫸ ").color(DARK_GRAY).bold(false);
 		
 	}
 

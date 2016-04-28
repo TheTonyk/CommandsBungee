@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.text.Format;
+import java.util.TimeZone;
 import java.text.SimpleDateFormat;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -15,6 +15,7 @@ import com.thetonyk.CommandsBungee.Utils.PermissionsUtils;
 import com.thetonyk.CommandsBungee.Utils.PlayerUtils;
 import com.thetonyk.CommandsBungee.Utils.PlayerUtils.Rank;
 
+import static net.md_5.bungee.api.ChatColor.*;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ServerPing;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -282,8 +283,9 @@ public class PlayerListener implements Listener {
 			
 			if (PlayerUtils.getBanDuration(banId) > 0) {
 				
-				Format format = new SimpleDateFormat("dd MMM yyyy HH:mm");
-				expire = "\n§6Expire §8⫸ §7" + format.format(PlayerUtils.getBanDate(banId) + PlayerUtils.getBanDuration(banId));
+				SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy HH:mm");
+				format.setTimeZone(TimeZone.getTimeZone("UTC"));
+				expire = "\n§6Expire §8⫸ §7" + format.format(PlayerUtils.getBanDate(banId) + PlayerUtils.getBanDuration(banId)) + " UTC";
 				
 			}
 			
@@ -293,7 +295,7 @@ public class PlayerListener implements Listener {
 				
 				if (!player.hasPermission("proxy.alerts")) continue;
 				
-				player.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7'§6" + event.getConnection().getName() + "§7' can't connect due to Ban §8(§7Reason(s): §6" + BanCommand.Reasons.valueOf(PlayerUtils.getBanReason(banId).toUpperCase()).getName() + "§8)")).create());
+				player.sendMessage(Main.prefix().append("'").color(GRAY).append(event.getConnection().getName()).color(GOLD).append("' can't connect due to a ban ").color(GRAY).append("(").color(DARK_GRAY).append("Reason(s): ").color(GRAY).append(BanCommand.Reasons.valueOf(PlayerUtils.getBanReason(banId).toUpperCase()).getName()).color(GOLD).append(")").color(DARK_GRAY).create());
 				
 			}
 			
@@ -320,7 +322,7 @@ public class PlayerListener implements Listener {
 				
 				if (!player.hasPermission("proxy.alerts")) continue;
 				
-				player.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7'§6" +  event.getConnection().getName() + "§7' can't connect due to IP Ban §8(§7Account(s): §6" + account.subSequence(0, (account.length() - 2)) + "§8)")).create());
+				player.sendMessage(Main.prefix().append("'").color(GRAY).append(event.getConnection().getName()).color(GOLD).append("' can't connect due to a IP ban ").color(GRAY).append("(").color(DARK_GRAY).append("Account(s): ").color(GRAY).append(account.subSequence(0, (account.length() - 2)).toString()).color(GOLD).append(")").color(DARK_GRAY).create());
 				
 			}
 			

@@ -1,6 +1,9 @@
 package com.thetonyk.CommandsBungee.Commands;
 
-import net.md_5.bungee.api.ChatColor;
+import static net.md_5.bungee.api.ChatColor.*;
+
+import com.thetonyk.CommandsBungee.Main;
+
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -18,17 +21,13 @@ public class AboutCommand extends Command {
 	@Override
     public void execute(CommandSender sender, String[] args) {
 		
-		ComponentBuilder text = new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7Plugins by TheTonyk for CommandsPVP."));
+		ComponentBuilder text = Main.prefix().append("Plugins by TheTonyk for CommandsPVP.").color(GRAY);
 		sender.sendMessage(text.create());
 		
-		text = new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7Twitter: "));
-		text.append(ChatColor.translateAlternateColorCodes('§', "§b@TheTonyk"));
-		text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§7Visit the Twitter of §aTheTonyk§7.")).create()));
+		text = Main.prefix().append("Twitter: ").color(GRAY).append("@TheTonyk").color(AQUA).italic(true);
+		text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Visit the Twitter of ").color(GRAY).append("TheTonyk").color(GREEN).append(".").color(GRAY).create()));
 		text.event(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://twitter.com/TheTonyk"));
 		sender.sendMessage(text.create());
-		
-		
-		
 
     	return;
     	
