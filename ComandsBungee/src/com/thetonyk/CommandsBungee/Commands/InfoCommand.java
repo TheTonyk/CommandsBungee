@@ -16,10 +16,11 @@ import com.thetonyk.CommandsBungee.Utils.DatabaseUtils;
 import com.thetonyk.CommandsBungee.Utils.PlayerUtils;
 import com.thetonyk.CommandsBungee.Utils.PlayerUtils.Rank;
 
-import net.md_5.bungee.api.ChatColor;
+import static net.md_5.bungee.api.ChatColor.*;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.ComponentBuilder.FormatRetention;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
@@ -45,14 +46,14 @@ public class InfoCommand extends Command implements TabExecutor {
 		
 		if (args.length < 1) {
 			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7Usage: /info <player>")).create());
+			sender.sendMessage(Main.prefix().append("Usage: /info <player>").color(GRAY).create());
 			return;
 			
 		}
 
 		if (!PlayerUtils.exist(args[0])) {
 			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ '§6" + args[0] + "§7' has never come on the server.")).create());
+			sender.sendMessage(Main.prefix().append("'").color(GRAY).append(args[0]).color(GOLD).append("' has never come on the server.").color(GRAY).create());
 			return;
 			
 		}
@@ -86,73 +87,73 @@ public class InfoCommand extends Command implements TabExecutor {
 		} catch (SQLException e) {
 			
 			Main.proxy.getLogger().severe("[PlayerUtils] Error to get infos of player " + args[0] + ".");
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7Error to get infos.")).create());
+			sender.sendMessage(Main.prefix().append("Error to get infos.").color(GRAY).create());
 	    	return;
 			
 		}
 		
 		Format format = new SimpleDateFormat("dd MMM yyyy HH:mm");
 		
-		sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7All infos about '§6" + name + "§7'.")).create());
-		sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸ §7UUID: '§6" + uuid.toString() + "§7'.")).create());
-		sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸ §7Rank: '§6" + rank.getName() + "§7'.")).create());
-		sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸ §7Status: " + (Main.proxy.getProxy().getPlayer(uuid) == null ? "§cOffline" : "§aOnline") + "§7.")).create());
-		if (Main.proxy.getProxy().getPlayer(uuid) != null) sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸ §7Server: '§6" + Main.proxy.getProxy().getPlayer(uuid).getServer().getInfo().getName() + "§7'.")).create());
-		sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸ §7First Join: '§6" + format.format(firstJoin) + "§7'.")).create());
-		sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸ §7Last Join: '§6" + format.format(lastJoin) + "§7'.")).create());
-		sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸ §7Last Quit: '§6" + (lastQuit == -1 ? "Never" : format.format(lastJoin)) + "§7'.")).create());
+		sender.sendMessage(Main.prefix().append("All infos about '").color(GRAY).append(name).color(GOLD).append("'.").color(GRAY).create());
+		sender.sendMessage(new ComponentBuilder("⫸ ").color(DARK_GRAY).append("UUID: ").color(GRAY).append(uuid.toString()).color(GOLD).create());
+		sender.sendMessage(new ComponentBuilder("⫸ ").color(DARK_GRAY).append("Rank: ").color(GRAY).append(rank.getName()).color(GOLD).create());
+		sender.sendMessage(new ComponentBuilder("⫸ ").color(DARK_GRAY).append("Status: ").color(GRAY).append(Main.proxy.getProxy().getPlayer(uuid) == null ? "Offline" : "Online").color(Main.proxy.getProxy().getPlayer(uuid) == null ? RED : GREEN).create());
+		if (Main.proxy.getProxy().getPlayer(uuid) != null) sender.sendMessage(new ComponentBuilder("⫸ ").color(DARK_GRAY).append("Server: ").color(GRAY).append(Main.proxy.getProxy().getPlayer(uuid).getServer().getInfo().getName()).color(GOLD).create());
+		sender.sendMessage(new ComponentBuilder("⫸ ").color(DARK_GRAY).append("First Join: ").color(GRAY).append(format.format(firstJoin)).color(GOLD).create());
+		sender.sendMessage(new ComponentBuilder("⫸ ").color(DARK_GRAY).append("Last Join: ").color(GRAY).append(format.format(lastJoin)).color(GOLD).create());
+		sender.sendMessage(new ComponentBuilder("⫸ ").color(DARK_GRAY).append("Last Quit: ").color(GRAY).append(lastQuit == -1 ? "Never" : format.format(lastJoin)).color(GOLD).create());
 		
 		if (PlayerUtils.getRank(sender.getName()) == Rank.ADMIN) { 
 		
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸ §7All IP's used by this player:")).create());
-			if (Main.proxy.getProxy().getPlayer(uuid) != null) sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸   §a" + Main.proxy.getProxy().getPlayer(uuid).getAddress().getAddress().getHostAddress())).create());
+			sender.sendMessage(new ComponentBuilder("⫸ ").color(DARK_GRAY).append("All IP's used by this player:").color(GRAY).create());
+			if (Main.proxy.getProxy().getPlayer(uuid) != null) sender.sendMessage(new ComponentBuilder("⫸   ").color(DARK_GRAY).append(Main.proxy.getProxy().getPlayer(uuid).getAddress().getAddress().getHostAddress()).color(GREEN).create());
 			
 			for (String ip : ips) {
 				
 				if (Main.proxy.getProxy().getPlayer(uuid) != null && ip.equalsIgnoreCase(Main.proxy.getProxy().getPlayer(uuid).getAddress().getAddress().getHostAddress())) continue;
 				
-				sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸   §c" + ip)).create());
+				sender.sendMessage(new ComponentBuilder("⫸   ").color(DARK_GRAY).append(ip).color(RED).create());
 				
 			}
 			
 		}
 		
-		sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸ §7All possible alts used by this player:")).create());
+		sender.sendMessage(new ComponentBuilder("⫸ ").color(DARK_GRAY).append("All possible alts used by this player:").color(GRAY).create());
 		
 		Map<String, Integer> alts = PlayerUtils.getAlts(uuid);
 		
 		if (alts.isEmpty()) {
 			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸   §7This player don't have any know alts.")).create());
+			sender.sendMessage(new ComponentBuilder("⫸   ").color(DARK_GRAY).append("This player don't have any know alts.").color(GRAY).create());
 			
 		}
 		
 		for (Entry<String, Integer> alt : alts.entrySet()) {
 			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸   §a" + alt.getKey() + " §8(§a" + alt.getValue() + " §7IPs common§8)")).create());
+			sender.sendMessage(new ComponentBuilder("⫸   ").color(DARK_GRAY).append(alt.getKey()).color(GOLD).append("(").color(DARK_GRAY).append(String.valueOf(alt.getValue())).color(GREEN).append(" IPs common").color(GRAY).append(")").color(DARK_GRAY).create());
 			
 		}
 		
-		sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸ §7All punishements of this player:")).create());
+		sender.sendMessage(new ComponentBuilder("⫸ ").color(DARK_GRAY).append("All punishements of this player:").color(GRAY).create());
 		
 		format = new SimpleDateFormat("dd'/'MM'/'yy HH:mm");
 		Format formatShort = new SimpleDateFormat("dd'/'MM HH:mm");
 		
 		for (String[] ban : PlayerUtils.getAllBans(uuid)) {
 				
-				ComponentBuilder text = new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸   §6Ban §8| "));
-				text.append(ChatColor.translateAlternateColorCodes('§', "§7" + format.format(Long.parseLong(ban[0]))));
-				text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§7Banned by §a" + PlayerUtils.getName(Integer.parseInt(ban[3])))).create()));
-				text.append(ChatColor.translateAlternateColorCodes('§', " §8| "));
-				text.append(ChatColor.translateAlternateColorCodes('§', "§a" + BanCommand.Reasons.valueOf(ban[2].toUpperCase()).getShortName()));
-				text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a" + BanCommand.Reasons.valueOf(ban[2].toUpperCase()).getName())).create()));
-				text.append(ChatColor.translateAlternateColorCodes('§', " §8| §7" + ((Long.parseLong(ban[1]) == -1 ? "Lifetime" : formatShort.format(Long.parseLong(ban[0]) + Long.parseLong(ban[1]))))));
+				ComponentBuilder text = new ComponentBuilder("⫸   ").color(DARK_GRAY).append("Ban ").color(GOLD).append("| ").color(DARK_GRAY);
+				text.append(format.format(Long.parseLong(ban[0]))).color(GRAY);
+				text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Banned by ").color(GRAY).append(PlayerUtils.getName(Integer.parseInt(ban[3]))).color(GREEN).append(".").color(GRAY).create()));
+				text.append(" | ").retain(FormatRetention.NONE).color(DARK_GRAY);
+				text.append(BanCommand.Reasons.valueOf(ban[2].toUpperCase()).getShortName()).color(GREEN);
+				text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(BanCommand.Reasons.valueOf(ban[2].toUpperCase()).getName()).color(GOLD).create()));
+				text.append(" | ").retain(FormatRetention.NONE).color(DARK_GRAY).append(((Long.parseLong(ban[1]) == -1 ? "Lifetime" : formatShort.format(Long.parseLong(ban[0]) + Long.parseLong(ban[1]))))).color(GRAY);
 				
 				if (PlayerUtils.getRank(sender.getName()) == Rank.ADMIN) {
 					
-					text.append(ChatColor.translateAlternateColorCodes('§', " §8| "));
-					text.append(ChatColor.translateAlternateColorCodes('§', (PlayerUtils.getCanceledBan(PlayerUtils.getBanId(Long.parseLong(ban[0]), name)) == 0 ? "§c" : "§7§o") + "Cancel"));
-					text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', (PlayerUtils.getCanceledBan(PlayerUtils.getBanId(Long.parseLong(ban[0]), name)) == 0 ? "§7Cancel the ban" : "§7Canceled by §a" + PlayerUtils.getName(PlayerUtils.getCanceledBan(PlayerUtils.getBanId(Long.parseLong(ban[0]), name)))))).create()));
+					text.append(" | ").color(DARK_GRAY);
+					text.append("Cancel").color(PlayerUtils.getCanceledBan(PlayerUtils.getBanId(Long.parseLong(ban[0]), name)) == 0 ? RED : GRAY).italic(PlayerUtils.getCanceledBan(PlayerUtils.getBanId(Long.parseLong(ban[0]), name)) == 0 ? false : true);
+					text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(PlayerUtils.getCanceledBan(PlayerUtils.getBanId(Long.parseLong(ban[0]), name)) == 0 ? "Cancel the ban" : "Canceled by ").color(GRAY).append(PlayerUtils.getCanceledBan(PlayerUtils.getBanId(Long.parseLong(ban[0]), name)) == 0 ? "" : PlayerUtils.getName(PlayerUtils.getCanceledBan(PlayerUtils.getBanId(Long.parseLong(ban[0]), name)))).color(GREEN).append(".").color(GRAY).create()));
 					if (PlayerUtils.getCanceledBan(PlayerUtils.getBanId(Long.parseLong(ban[0]), name)) == 0) text.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unban " + PlayerUtils.getBanId(Long.parseLong(ban[0]), name)));
 					
 				}
@@ -163,12 +164,12 @@ public class InfoCommand extends Command implements TabExecutor {
 			
 		for (String[] kick : PlayerUtils.getAllKick(uuid)) {
 			
-			ComponentBuilder text = new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸   §6Kick §8| "));
-			text.append(ChatColor.translateAlternateColorCodes('§', "§7" + format.format(Long.parseLong(kick[0]))));
-			text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§7Kicked by §a" + PlayerUtils.getName(Integer.parseInt(kick[2])))).create()));
-			text.append(ChatColor.translateAlternateColorCodes('§', " §8| "));
-			text.append(ChatColor.translateAlternateColorCodes('§', "§a" + KickCommand.Reasons.valueOf(kick[1].toUpperCase()).getShortName()));
-			text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a" + KickCommand.Reasons.valueOf(kick[1].toUpperCase()).getName())).create()));
+			ComponentBuilder text = new ComponentBuilder("⫸   ").color(DARK_GRAY).append("Kick ").color(GOLD).append("| ").color(DARK_GRAY);
+			text.append(format.format(Long.parseLong(kick[0]))).color(GRAY);
+			text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Kicked by ").color(GRAY).append(PlayerUtils.getName(Integer.parseInt(kick[2]))).color(GREEN).append(".").color(GRAY).create()));
+			text.append(" | ").retain(FormatRetention.NONE).color(DARK_GRAY);
+			text.append(KickCommand.Reasons.valueOf(kick[1].toUpperCase()).getShortName()).color(GREEN);
+			text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(KickCommand.Reasons.valueOf(kick[1].toUpperCase()).getName()).color(GOLD).create()));
 			
 			sender.sendMessage(text.create());
 			
@@ -176,19 +177,19 @@ public class InfoCommand extends Command implements TabExecutor {
 		
 		for (String[] mute : PlayerUtils.getAllMute(uuid)) {
 			
-			ComponentBuilder text = new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸   §6Mute §8| "));
-			text.append(ChatColor.translateAlternateColorCodes('§', "§7" + format.format(Long.parseLong(mute[0]))));
-			text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§7Muted by §a" + PlayerUtils.getName(Integer.parseInt(mute[3])))).create()));
-			text.append(ChatColor.translateAlternateColorCodes('§', " §8| "));
-			text.append(ChatColor.translateAlternateColorCodes('§', "§a" + MuteCommand.Reasons.valueOf(mute[2].toUpperCase()).getShortName()));
-			text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a" + MuteCommand.Reasons.valueOf(mute[2].toUpperCase()).getName())).create()));
-			text.append(ChatColor.translateAlternateColorCodes('§', " §8| §7" + formatShort.format(Long.parseLong(mute[0]) + Long.parseLong(mute[1]))));
+			ComponentBuilder text = new ComponentBuilder("⫸   ").color(DARK_GRAY).append("Mute ").color(GOLD).append("| ").color(DARK_GRAY);
+			text.append(format.format(Long.parseLong(mute[0]))).color(GRAY);
+			text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Muted by ").color(GRAY).append(PlayerUtils.getName(Integer.parseInt(mute[3]))).color(GREEN).append(".").color(GRAY).create()));
+			text.append(" | ").retain(FormatRetention.NONE).color(DARK_GRAY);
+			text.append(MuteCommand.Reasons.valueOf(mute[2].toUpperCase()).getShortName()).color(GREEN);
+			text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(MuteCommand.Reasons.valueOf(mute[2].toUpperCase()).getName()).color(GOLD).create()));
+			text.append(" | ").retain(FormatRetention.NONE).color(DARK_GRAY).append(formatShort.format(Long.parseLong(mute[0]) + Long.parseLong(mute[1]))).color(GRAY);
 			
 			if (PlayerUtils.getRank(sender.getName()) == Rank.ADMIN) {
 				
-				text.append(ChatColor.translateAlternateColorCodes('§', " §8| "));
-				text.append(ChatColor.translateAlternateColorCodes('§', (PlayerUtils.getCanceledMute(PlayerUtils.getMuteId(Long.parseLong(mute[0]), name)) == 0 ? "§c" : "§7§o") + "Cancel"));
-				text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', (PlayerUtils.getCanceledMute(PlayerUtils.getMuteId(Long.parseLong(mute[0]), name)) == 0 ? "§7Cancel the mute" : "§7Canceled by §a" + PlayerUtils.getName(PlayerUtils.getCanceledMute(PlayerUtils.getMuteId(Long.parseLong(mute[0]), name)))))).create()));
+				text.append(" | ").color(DARK_GRAY);
+				text.append("Cancel").color(PlayerUtils.getCanceledMute(PlayerUtils.getMuteId(Long.parseLong(mute[0]), name)) == 0 ? RED : GRAY).italic(PlayerUtils.getCanceledMute(PlayerUtils.getMuteId(Long.parseLong(mute[0]), name)) == 0 ? false : true);
+				text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(PlayerUtils.getCanceledMute(PlayerUtils.getMuteId(Long.parseLong(mute[0]), name)) == 0 ? "Cancel the mute" : "Canceled by ").color(GRAY).append(PlayerUtils.getCanceledMute(PlayerUtils.getMuteId(Long.parseLong(mute[0]), name)) == 0 ? "" : PlayerUtils.getName(PlayerUtils.getCanceledMute(PlayerUtils.getMuteId(Long.parseLong(mute[0]), name)))).color(GREEN).append(".").color(GRAY).create()));
 				if (PlayerUtils.getCanceledMute(PlayerUtils.getMuteId(Long.parseLong(mute[0]), name)) == 0) text.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/unmute " + PlayerUtils.getMuteId(Long.parseLong(mute[0]), name)));
 				
 			}

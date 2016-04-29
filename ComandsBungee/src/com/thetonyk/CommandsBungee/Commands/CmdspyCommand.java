@@ -6,7 +6,7 @@ import com.thetonyk.CommandsBungee.Main;
 import com.thetonyk.CommandsBungee.Utils.PlayerUtils;
 import com.thetonyk.CommandsBungee.Utils.PlayerUtils.Rank;
 
-import net.md_5.bungee.api.ChatColor;
+import static net.md_5.bungee.api.ChatColor.*;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -32,34 +32,27 @@ public class CmdspyCommand extends Command implements TabExecutor {
     		
 		}
 		
-		if (args.length < 1) {
+		if (args.length < 1 || (!args[0].equalsIgnoreCase("on") && !args[0].equalsIgnoreCase("off"))) {
 			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7Usage: /cmdspy <on|off> [server]" + (PlayerUtils.getRank(sender.toString()) == Rank.ADMIN ? " [player]" : ""))).create());
-			return;
-			
-		}
-		
-		if (!args[0].equalsIgnoreCase("on") && !args[0].equalsIgnoreCase("off")) {
-			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7Usage: /cmdspy <on|off> [server]" + (PlayerUtils.getRank(sender.toString()) == Rank.ADMIN ? " [player]" : ""))).create());
+			sender.sendMessage(Main.prefix().append("Usage: /cmdspy <on|off> [server]" + (PlayerUtils.getRank(sender.toString()) == Rank.ADMIN ? " [player]" : "")).color(GRAY).create());
 			return;
 			
 		}
 		
 		if (args.length > 1 && !Main.proxy.getProxy().getServers().keySet().contains(args[1]) && !args[1].equalsIgnoreCase("all")) {
 			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ '§6" + args[1] + "§7' is not a started server.")).create());
+			sender.sendMessage(Main.prefix().append("'").color(GRAY).append(args[1]).color(GOLD).append("' is not a online server.").color(GRAY).create());
 			return;
 			
 		}
 		
 		ProxiedPlayer player = Main.proxy.getProxy().getPlayer(sender.toString());
 
-		if (args.length > 2) {
+		if (args.length > 2 && PlayerUtils.getRank(sender.toString()) == Rank.ADMIN) {
 			
 			if (Main.proxy.getProxy().getPlayer(args[2]) == null) {
 			
-				sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ '§6" + args[2] + "§7' is not online.")).create());
+				sender.sendMessage(Main.prefix().append("'").color(GRAY).append(args[2]).color(GOLD).append("' is not online.").color(GRAY).create());
 				return;
 			
 			}
@@ -70,9 +63,9 @@ public class CmdspyCommand extends Command implements TabExecutor {
 		
 		if (args[0].equalsIgnoreCase("off")) {
 			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7The command spy has been disabled.")).create());
+			sender.sendMessage(Main.prefix().append("The command spy has been disabled.").color(GRAY).create());
 			
-			if (player != Main.proxy.getProxy().getPlayer(sender.toString())) player.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7The command spy has been disabled.")).create());
+			if (player != Main.proxy.getProxy().getPlayer(sender.toString())) player.sendMessage(Main.prefix().append("The command spy has been disabled.").color(GRAY).create());
 			
 			if (!Main.cmdspy.containsKey(player)) return;
 			
@@ -82,9 +75,9 @@ public class CmdspyCommand extends Command implements TabExecutor {
 		
 		if (args[0].equalsIgnoreCase("on")) {
 			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7The command spy has been enabled.")).create());
+			sender.sendMessage(Main.prefix().append("The command spy has been enabled.").color(GRAY).create());
 			
-			if (player != Main.proxy.getProxy().getPlayer(sender.toString())) player.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7The command spy has been enabled.")).create());
+			if (player != Main.proxy.getProxy().getPlayer(sender.toString())) player.sendMessage(Main.prefix().append("The command spy has been enabled.").color(GRAY).create());
 			
 			String server = args.length < 2 ? player.getServer().getInfo().getName() : args[1];
 			

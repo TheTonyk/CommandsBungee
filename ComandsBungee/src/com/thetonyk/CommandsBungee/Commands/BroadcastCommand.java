@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.thetonyk.CommandsBungee.Main;
 
-import net.md_5.bungee.api.ChatColor;
+import static net.md_5.bungee.api.ChatColor.*;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -25,14 +25,14 @@ public class BroadcastCommand extends Command implements TabExecutor {
 
 		if (!sender.hasPermission("proxy.broadcast")) {
 			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "Unknown command.")).create());
+			sender.sendMessage(new ComponentBuilder("Unknown command.").create());
     		return;
     		
 		}
 				
 		if (args.length < 1) {
 			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7Usage: /broadcast <message>")).create());
+			sender.sendMessage(Main.prefix().append("Usage: /broadcast <message>").color(GRAY).create());
 			return;
 			
 		}
@@ -47,7 +47,7 @@ public class BroadcastCommand extends Command implements TabExecutor {
 		
 		for (ProxiedPlayer player : Main.proxy.getProxy().getPlayer(sender.getName()).getServer().getInfo().getPlayers()) {
 			
-			player.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸ §b§l" + message.toString())).create());
+			player.sendMessage(new ComponentBuilder("⫸ ").color(DARK_GRAY).append(message.toString()).color(AQUA).bold(true).create());
 			
 		}
 		

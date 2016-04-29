@@ -1,6 +1,9 @@
 package com.thetonyk.CommandsBungee.Commands;
 
-import net.md_5.bungee.api.ChatColor;
+import static net.md_5.bungee.api.ChatColor.*;
+
+import com.thetonyk.CommandsBungee.Main;
+
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -18,16 +21,14 @@ public class HelpCommand extends Command {
 	@Override
     public void execute(CommandSender sender, String[] args) {
 		
-		sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7Help informations:")).create());
-		sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸ §7Contact a staff member if you need help.")).create());
-		sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸ §7Minecraft §61.8.8 §7or §61.8.9 §7recommended.")).create());
+		sender.sendMessage(Main.prefix().append("Help informations:").color(GRAY).create());
+		sender.sendMessage(new ComponentBuilder("⫸ ").color(DARK_GRAY).append("Contact a staff member if you need help.").color(GRAY).create());
+		sender.sendMessage(new ComponentBuilder("⫸ ").color(DARK_GRAY).append("Minecraft ").color(GRAY).append("1.8.8 ").color(GOLD).append("or ").color(GRAY).append("1.8.9 ").color(GOLD).append("recommended.").color(GRAY).create());
 		
-		ComponentBuilder text = new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸ §7Twitter of the server: "));
-		text.append(ChatColor.translateAlternateColorCodes('§', "§b@CommandsPVP"));
-		text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§7Visit our §aTwitter§7.")).create()));
+		ComponentBuilder text = new ComponentBuilder("⫸ ").color(DARK_GRAY).append("Twitter of the server: ").color(GRAY).append("@CommandsPVP").color(AQUA).italic(true);
+		text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Visit our ").color(GRAY).append("Twitter").color(GREEN).append(".").color(GRAY).create()));
 		text.event(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://twitter.com/CommandsPVP"));
-		text.append(ChatColor.translateAlternateColorCodes('§', "§7."));
-		
+		text.append(".").color(GRAY);
 		sender.sendMessage(text.create());
     	
     }
