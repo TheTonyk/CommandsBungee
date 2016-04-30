@@ -130,7 +130,7 @@ public class InfoCommand extends Command implements TabExecutor {
 		
 		for (Entry<String, Integer> alt : alts.entrySet()) {
 			
-			sender.sendMessage(new ComponentBuilder("⫸   ").color(DARK_GRAY).append(alt.getKey()).color(GOLD).append("(").color(DARK_GRAY).append(String.valueOf(alt.getValue())).color(GREEN).append(" IPs common").color(GRAY).append(")").color(DARK_GRAY).create());
+			sender.sendMessage(new ComponentBuilder("⫸   ").color(DARK_GRAY).append(alt.getKey()).color(GOLD).append(" (").color(DARK_GRAY).append(String.valueOf(alt.getValue())).color(GREEN).append(" IPs common").color(GRAY).append(")").color(DARK_GRAY).create());
 			
 		}
 		
