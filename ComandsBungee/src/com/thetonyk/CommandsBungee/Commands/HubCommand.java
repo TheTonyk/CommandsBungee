@@ -9,7 +9,7 @@ public class HubCommand extends Command {
 	
 	public HubCommand() {
 		
-		super("hub");
+		super("hub", "", "lobby");
 		
 	}
 	
