@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 import com.thetonyk.CommandsBungee.Main;
 import com.thetonyk.CommandsBungee.Utils.PlayerUtils;
 
-import net.md_5.bungee.api.ChatColor;
+import static net.md_5.bungee.api.ChatColor.*;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -34,7 +34,7 @@ public class MsgCommand extends Command implements TabExecutor {
 		
 		if (args.length < 2) {
 			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7Usage: /msg <player> <message>")).create());
+			sender.sendMessage(Main.prefix().append("Usage: /msg <player> <message>").color(GRAY).create());
 			return;
 			
 		}
@@ -43,28 +43,28 @@ public class MsgCommand extends Command implements TabExecutor {
 		
 		if (Main.proxy.getProxy().getPlayer(args[0]) == null) {
 			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7The player '§6" + args[0] + "§7' is not online.")).create());
+			sender.sendMessage(Main.prefix().append("The player '").color(GRAY).append(args[0]).color(GOLD).append("' is not online.").color(GRAY).create());
 			return;
 			
 		}
 		
 		if (sender.getName().equalsIgnoreCase(args[0])) {
 			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7You cannot send messages to yourself.")).create());
+			sender.sendMessage(Main.prefix().append("You cannot send messages to yourself.").color(GRAY).create());
 			return;
 			
 		}
 		
 		if (PlayerUtils.exist(Main.proxy.getProxy().getPlayer(sender.getName())) && PlayerUtils.getPrivatesState(Main.proxy.getProxy().getPlayer(sender.getName())) == 0) {
 			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7Your privates messages are disabled.")).create());
+			sender.sendMessage(Main.prefix().append("Your privates messages are disabled.").create());
 			return;
 			
 		}
 		
 		if (PlayerUtils.exist(Main.proxy.getProxy().getPlayer(args[0])) && PlayerUtils.getPrivatesState(Main.proxy.getProxy().getPlayer(args[0])) == 0) {
 			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7You can't send messages to '§6" + Main.proxy.getProxy().getPlayer(args[0]).getName() + "§7'.")).create());
+			sender.sendMessage(Main.prefix().append("You can't send messages to '").color(GRAY).append(Main.proxy.getProxy().getPlayer(args[0]).getName()).color(GOLD).append("'.").color(GRAY).create());
 			return;
 			
 		}
@@ -77,11 +77,10 @@ public class MsgCommand extends Command implements TabExecutor {
 			
 		}
 		
-		sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§6Private §8| §7" + Main.proxy.getProxy().getPlayer(args[0]).getName() + " §c⫷ §f" + message)).create());
+		sender.sendMessage(new ComponentBuilder("Private ").color(GOLD).append("| ").color(DARK_GRAY).append(Main.proxy.getProxy().getPlayer(args[0]).getName()).color(GRAY).append(" ⫷ ").color(RED).append(message.toString()).color(WHITE).create());
 		
-		ComponentBuilder text = new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§6Private §8| §7" + sender.getName() + " §a⫸ §f"));
-		text.append(ChatColor.translateAlternateColorCodes('§', message.toString()));
-		text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§7Reply to §a" + sender.getName())).create()));
+		ComponentBuilder text = new ComponentBuilder("Private ").color(GOLD).append("| ").color(DARK_GRAY).append(sender.getName()).color(GRAY).append(" ⫸ ").color(GREEN).append(message.toString()).color(WHITE);
+		text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Reply to ").color(GRAY).append(sender.getName()).color(GREEN).append(".").color(GRAY).create()));
 		text.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + sender.getName() + " "));
 		Main.proxy.getProxy().getPlayer(args[0]).sendMessage(text.create());
 		

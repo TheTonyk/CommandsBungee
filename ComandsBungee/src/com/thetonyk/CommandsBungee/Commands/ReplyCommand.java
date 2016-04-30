@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 import com.thetonyk.CommandsBungee.Main;
 import com.thetonyk.CommandsBungee.Utils.PlayerUtils;
 
-import net.md_5.bungee.api.ChatColor;
+import static net.md_5.bungee.api.ChatColor.*;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -30,7 +30,7 @@ public class ReplyCommand extends Command implements TabExecutor {
 		
 		if (args.length < 1) {
 			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7Usage: /reply <message>")).create());
+			sender.sendMessage(Main.prefix().append("Usage: /reply <message>").color(GRAY).create());
 			return;
 			
 		}
@@ -39,28 +39,28 @@ public class ReplyCommand extends Command implements TabExecutor {
 		
 		if (!MsgCommand.lastMsg.containsKey(sender.getName())) {
 			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7You have nobody to reply to.")).create());
+			sender.sendMessage(Main.prefix().append("You have nobody to reply to.").color(GRAY).create());
 			return;
 			
 		}
 		
 		if (Main.proxy.getProxy().getPlayer(MsgCommand.lastMsg.get(sender.getName())) == null) {
 			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7The player '§6" + MsgCommand.lastMsg.get(sender.getName()) + "§7' is not online.")).create());
+			sender.sendMessage(Main.prefix().append("The player '").color(GRAY).append(MsgCommand.lastMsg.get(sender.getName())).color(GOLD).append("' is not online.").color(GRAY).create());
 			return;
 			
 		}
 		
 		if (PlayerUtils.exist(Main.proxy.getProxy().getPlayer(sender.getName())) && PlayerUtils.getPrivatesState(Main.proxy.getProxy().getPlayer(sender.getName())) == 0) {
 			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7Your privates messages are disabled.")).create());
+			sender.sendMessage(Main.prefix().append("Your privates messages are disabled.").color(GRAY).create());
 			return;
 			
 		}
 		
 		if (PlayerUtils.exist(Main.proxy.getProxy().getPlayer(MsgCommand.lastMsg.get(sender.getName()))) && PlayerUtils.getPrivatesState(Main.proxy.getProxy().getPlayer(MsgCommand.lastMsg.get(sender.getName()))) == 0) {
 			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7You can't send messages to '§6" + Main.proxy.getProxy().getPlayer(MsgCommand.lastMsg.get(sender.getName())).getName() + "§7'.")).create());
+			sender.sendMessage(Main.prefix().append("You can't send messages to '").color(GRAY).append(Main.proxy.getProxy().getPlayer(MsgCommand.lastMsg.get(sender.getName())).getName()).color(GOLD).append("'.").color(GRAY).create());
 			return;
 			
 		}
@@ -73,11 +73,10 @@ public class ReplyCommand extends Command implements TabExecutor {
 			
 		}
 		
-		sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§6Private §8| §7" + Main.proxy.getProxy().getPlayer(MsgCommand.lastMsg.get(sender.getName())).getName() + " §c⫷ §f" + message)).create());
+		sender.sendMessage(new ComponentBuilder("Private ").color(GOLD).append("| ").color(DARK_GRAY).append(Main.proxy.getProxy().getPlayer(MsgCommand.lastMsg.get(sender.getName())).getName()).color(GRAY).append(" ⫷ ").color(RED).append(message.toString()).color(WHITE).create());
 		
-		ComponentBuilder text = new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§6Private §8| §7" + sender.getName() + " §a⫸ §f"));
-		text.append(ChatColor.translateAlternateColorCodes('§', message.toString()));
-		text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§7Reply to §a" + sender.getName())).create()));
+		ComponentBuilder text = new ComponentBuilder("Private ").color(GOLD).append("| ").color(DARK_GRAY).append(sender.getName()).color(GRAY).append(" ⫸ ").color(GREEN).append(message.toString()).color(WHITE);
+		text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Reply to ").color(GRAY).append(sender.getName()).color(GREEN).append(".").color(GRAY).create()));
 		text.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + sender.getName() + " "));
 		Main.proxy.getProxy().getPlayer(MsgCommand.lastMsg.get(sender.getName())).sendMessage(text.create());
 		

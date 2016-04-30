@@ -5,9 +5,8 @@ import java.util.List;
 
 import com.thetonyk.CommandsBungee.Main;
 
-import net.md_5.bungee.api.ChatColor;
+import static net.md_5.bungee.api.ChatColor.*;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.TabExecutor;
@@ -24,19 +23,19 @@ public class PingCommand extends Command implements TabExecutor {
 		
 		if (args.length < 1) {
 			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7Your ping: §a" + Main.proxy.getProxy().getPlayer(sender.getName()).getPing() + "ms")).create());
+			sender.sendMessage(Main.prefix().append("Your ping: ").color(GRAY).append(Main.proxy.getProxy().getPlayer(sender.getName()).getPing() + "ms").color(GREEN).create());
 			return;
 			
 		}
 		
 		if (Main.proxy.getProxy().getPlayer(args[0]) == null) {
 			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7The player '§6" + args[0] + "§7' is not online.")).create());
+			sender.sendMessage(Main.prefix().append("The player '").color(GRAY).append(args[0]).color(GOLD).append("' is not online.").color(GRAY).create());
 			return;
 			
 		}
 		
-		sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7'§6" + Main.proxy.getProxy().getPlayer(args[0]).getName() + "§7' ping: §a" + Main.proxy.getProxy().getPlayer(args[0]).getPing() + "ms")).create());
+		sender.sendMessage(Main.prefix().append("Ping of '").color(GRAY).append(Main.proxy.getProxy().getPlayer(args[0]).getName()).color(GOLD).append("': ").color(GRAY).append(Main.proxy.getProxy().getPlayer(args[0]).getPing() + "ms").color(GREEN).create());
 		
 	}
 	

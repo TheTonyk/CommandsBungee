@@ -3,9 +3,10 @@ package com.thetonyk.CommandsBungee.Commands;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.thetonyk.CommandsBungee.Main;
 import com.thetonyk.CommandsBungee.Utils.PlayerUtils;
 
-import net.md_5.bungee.api.ChatColor;
+import static net.md_5.bungee.api.ChatColor.*;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
@@ -31,20 +32,20 @@ public class UnmuteCommand extends Command implements TabExecutor {
 		
 		if (args.length < 1) {
 			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7Use §6/info <player>")).create());
+			sender.sendMessage(Main.prefix().append("Use ").color(GRAY).append("/info <player>").color(GOLD).create());
 			return;
 			
 		}
 		
 		if (Integer.parseInt(args[0]) == 0) {
 			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7Error to find the mute entry.")).create());
+			sender.sendMessage(Main.prefix().append("Error to find the mute entry.").color(GRAY).create());
 			return;
 			
 		}
 		
-		sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7The mute has been canceled")).create());
 		PlayerUtils.cancelMute(Integer.parseInt(args[0]), PlayerUtils.getId(sender.getName()));
+		sender.sendMessage(Main.prefix().append("The mute has been canceled").color(GRAY).create());
 		
 	}
 	

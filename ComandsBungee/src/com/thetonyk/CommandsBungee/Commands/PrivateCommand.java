@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.thetonyk.CommandsBungee.Main;
 
-import net.md_5.bungee.api.ChatColor;
+import static net.md_5.bungee.api.ChatColor.*;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -25,14 +25,14 @@ public class PrivateCommand extends Command implements TabExecutor {
 		
 		if (!sender.hasPermission("proxy.private")) {
 			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "Unknown command.")).create());
+			sender.sendMessage(new ComponentBuilder("Unknown command.").create());
     		return;
     		
 		}
 		
 		if (args.length < 1) {
 			
-			sender.sendMessage(new ComponentBuilder("§a§lGlobal §8⫸ §7Usage: /private <message>").create());
+			sender.sendMessage(Main.prefix().append("Usage: /private <message>").color(GRAY).create());
 			return;
 			
 		}
@@ -61,19 +61,19 @@ public class PrivateCommand extends Command implements TabExecutor {
 				
 			}
 			
-			player.sendMessage(new ComponentBuilder("§6StaffChat §8| §7" + Main.proxy.getProxy().getPlayer(sender.getName()).getName() + " §8⫸ §f" + message).create());
+			player.sendMessage(new ComponentBuilder("StaffChat ").color(GOLD).append("| ").color(DARK_GRAY).append(Main.proxy.getProxy().getPlayer(sender.getName()).getName()).color(GRAY).append(" ⫸ ").color(DARK_GRAY).append(message.toString()).color(WHITE).create());
 			players++;
 			
 		}
 		
 		if (players < 1) {
 			
-			sender.sendMessage(new ComponentBuilder("§a§lGlobal §8⫸ §7There are no others staff online.").create());
+			sender.sendMessage(Main.prefix().append("There are no others staff online.").color(GRAY).create());
 			return;
 			
 		}
 		
-		sender.sendMessage(new ComponentBuilder("§6StaffChat §8| §7" + Main.proxy.getProxy().getPlayer(sender.getName()).getName() + " §8⫸ §f" + message).create());
+		sender.sendMessage(new ComponentBuilder("StaffChat ").color(GOLD).append("| ").color(DARK_GRAY).append(Main.proxy.getProxy().getPlayer(sender.getName()).getName()).color(GRAY).append(" ⫸ ").color(DARK_GRAY).append(message.toString()).color(WHITE).create());
 		
 	}
 	

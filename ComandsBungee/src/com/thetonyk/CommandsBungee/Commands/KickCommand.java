@@ -11,7 +11,7 @@ import com.thetonyk.CommandsBungee.Utils.DatabaseUtils;
 import com.thetonyk.CommandsBungee.Utils.PlayerUtils;
 import com.thetonyk.CommandsBungee.Utils.PlayerUtils.Rank;
 
-import net.md_5.bungee.api.ChatColor;
+import static net.md_5.bungee.api.ChatColor.*;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -43,28 +43,27 @@ public class KickCommand extends Command implements TabExecutor {
 		
 		if (args.length < 1) {
 			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7Usage: /kick <player>")).create());
+			sender.sendMessage(Main.prefix().append("Usage: /kick <player>").color(GRAY).create());
 			return;
 			
 		}
 		
 		if (Main.proxy.getProxy().getPlayer(args[0]) == null) {
 			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7'§6" + args[0] + "§7' is not online.")).create());
+			sender.sendMessage(Main.prefix().append("'").color(GRAY).append(args[0]).color(GOLD).append("' is not online.").color(GRAY).create());
 			return;
 			
 		}
 		
 		if (args.length == 1) {
 			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7Kick of '§6" + args[0] + "§7'...")).create());
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7Choose the reason: §8(§7Click on it§8)")).create());
+			sender.sendMessage(Main.prefix().append("Kick of '").color(GRAY).append(args[0]).color(GOLD).append("'...").color(GRAY).create());
+			sender.sendMessage(Main.prefix().append("Choose the reason: ").color(GRAY).append("(").color(DARK_GRAY).append("Click on it").color(GRAY).append(")").color(DARK_GRAY).create());
 	        
 	        for (Reasons reasons : Reasons.values()) {
 	        	
-	        	ComponentBuilder text = new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸ "));
-	        	text.append(ChatColor.translateAlternateColorCodes('§', "§6" + reasons.getName()));
-	        	text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "Click to choose.")).create()));
+	        	ComponentBuilder text = new ComponentBuilder("⫸ ").color(DARK_GRAY).append(reasons.getName()).color(GOLD).italic(true);
+	        	text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to choose.").color(GRAY).create()));
 	        	text.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/kick " + args[0] + " " + reasons.toString().toLowerCase()));
 		        sender.sendMessage(text.create());
 	        	
@@ -84,7 +83,7 @@ public class KickCommand extends Command implements TabExecutor {
 			
 			if (PlayerUtils.getRank(sender.getName()) != Rank.ADMIN) {
 				
-				sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7This is not a valid reason.")).create());
+				sender.sendMessage(Main.prefix().append("This is not a valid reason.").color(GRAY).create());
 				return;
 				
 			}
@@ -113,7 +112,7 @@ public class KickCommand extends Command implements TabExecutor {
 		
 		if (player == null || reason == null) {
 			
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7Usage: /kick <player>")).create());
+			sender.sendMessage(Main.prefix().append("Usage: /kick <player>").color(GRAY).create());
 			return;
 			
 		}
@@ -129,14 +128,14 @@ public class KickCommand extends Command implements TabExecutor {
 			} catch (SQLException e) {
 				
 				Main.proxy.getLogger().severe("[KickCommand] Error to insert new kick of player " + player + ".");
-				sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7Error to kick the player.")).create());
+				sender.sendMessage(Main.prefix().append("Error to kick the player.").color(GRAY).create());
 				return;
 				
 			}
 		
 		}
 		
-		if (Main.proxy.getProxy().getPlayer(player) != null) Main.proxy.getProxy().getPlayer(player).disconnect(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸ §7You are §6kicked §7from §aCommandsPVP §8⫷\n\n§6Reason §8⫸ §7" + reason + "\n\n§8⫸ §7This is not a ban §8⫷")).create());
+		if (Main.proxy.getProxy().getPlayer(player) != null) Main.proxy.getProxy().getPlayer(player).disconnect(new ComponentBuilder("⫸ ").color(DARK_GRAY).append("You are ").color(GRAY).append("kicked ").color(GOLD).append("from ").color(GRAY).append("CommandsPVP ").color(GREEN).append("⫷").color(DARK_GRAY).append("\n\nReason ").color(GOLD).append("⫸ ").color(DARK_GRAY).append(reason).color(GOLD).append("\n\n⫸ ").color(DARK_GRAY).append("This is not a ban ").color(GRAY).append("⫷").color(DARK_GRAY).create());
 		
 	}
 	

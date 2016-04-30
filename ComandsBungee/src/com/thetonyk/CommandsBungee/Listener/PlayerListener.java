@@ -16,11 +16,11 @@ import com.thetonyk.CommandsBungee.Utils.PlayerUtils;
 import com.thetonyk.CommandsBungee.Utils.PlayerUtils.Rank;
 
 import static net.md_5.bungee.api.ChatColor.*;
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ServerPing;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.ComponentBuilder.FormatRetention;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.LoginEvent;
@@ -75,11 +75,11 @@ public class PlayerListener implements Listener {
 				
 				if (player == event.getPlayer()) continue;
 				
-				if (player.getServer().getInfo().getName().equalsIgnoreCase("hub")) player.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸ §7Welcome to §a" + event.getPlayer().getName() + " §7on the server! §8(§7#§6" + (PlayerUtils.uniquePlayers() + 1) + "§8)")).create());
+				if (player.getServer().getInfo().getName().equalsIgnoreCase("hub")) player.sendMessage(new ComponentBuilder("⫸ ").color(DARK_GRAY).append("Welcome to ").color(GRAY).append(event.getPlayer().getName()).color(GREEN).append(" on the server!").color(GRAY).append(" (").color(DARK_GRAY).append("#").color(GRAY).append(String.valueOf((PlayerUtils.uniquePlayers() + 1))).color(GOLD).append(")").color(DARK_GRAY).create());
 				
 			}
 			
-			event.getPlayer().sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§8⫸ §7Welcome to §a" + event.getPlayer().getName() + " §7on the server! §8(§7#§6" + (PlayerUtils.uniquePlayers() + 1) + "§8)")).create());
+			event.getPlayer().sendMessage(new ComponentBuilder("⫸ ").color(DARK_GRAY).append("Welcome to ").color(GRAY).append(event.getPlayer().getName()).color(GREEN).append(" on the server!").color(GRAY).append(" (").color(DARK_GRAY).append("#").color(GRAY).append(String.valueOf((PlayerUtils.uniquePlayers() + 1))).color(GOLD).append(")").color(DARK_GRAY).create());
 			
 		}
 		
@@ -104,15 +104,8 @@ public class PlayerListener implements Listener {
 				
 				if (player.getKey().getName() == event.getSender().toString()) continue;
 				
-				if (player.getValue().equalsIgnoreCase("all")) {
-					
-					player.getKey().sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§1" + event.getSender().toString() + "§8: §7§o" + event.getMessage())).create());
-					continue;
-					
-				}
-				
-				if (!Main.proxy.getProxy().getPlayer(event.getSender().toString()).getServer().getInfo().getName().equalsIgnoreCase(player.getValue())) continue;
-				player.getKey().sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§1" + event.getSender().toString() + "§8: §7§o" + event.getMessage())).create());
+				if (!Main.proxy.getProxy().getPlayer(event.getSender().toString()).getServer().getInfo().getName().equalsIgnoreCase(player.getValue()) && !player.getValue().equalsIgnoreCase("all")) continue;
+				player.getKey().sendMessage(new ComponentBuilder(event.getSender().toString()).color(DARK_BLUE).append(": ").color(DARK_GRAY).append(event.getMessage()).color(GRAY).italic(true).create());
 				
 			}
 			
@@ -225,8 +218,13 @@ public class PlayerListener implements Listener {
 			long minutes = TimeUnit.MILLISECONDS.toMinutes(duration) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(duration));
 			long seconds = TimeUnit.MILLISECONDS.toSeconds(duration) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration));
 			
-			((ProxiedPlayer) event.getSender()).sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7Your are muted for:")).create());
-			((ProxiedPlayer) event.getSender()).sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ §7" + (days > 0 ? "§a" + days + " §7days, " : "") + (hours > 0 ? "§a" + hours + " §7hours, " : "") + (minutes > 0 ? "§a" + minutes + " §7minutes, " : "") + "§a" + seconds + " §7seconds.")).create());
+			((ProxiedPlayer) event.getSender()).sendMessage(Main.prefix().append("Your are muted for:").color(GRAY).create());
+			ComponentBuilder text = new ComponentBuilder("");
+			if (days > 0) text.append(String.valueOf(days)).color(GREEN).append(" days, ").color(GRAY);
+			if (hours > 0) text.append(String.valueOf(hours)).color(GREEN).append(" hours, ").color(GRAY);
+			if (minutes > 0) text.append(String.valueOf(minutes)).color(GREEN).append(" minutes, ").color(GRAY);
+			text.append(String.valueOf(seconds)).color(GREEN).append(" seconds.").color(GRAY);
+			((ProxiedPlayer) event.getSender()).sendMessage(text.create());
 			
 		}
 		
@@ -241,21 +239,20 @@ public class PlayerListener implements Listener {
 		
 		if (alts.isEmpty()) return;
 		
-		ComponentBuilder text = new ComponentBuilder(ChatColor.translateAlternateColorCodes('§', "§a§lGlobal §8⫸ "));
-		text.append(ChatColor.translateAlternateColorCodes('§', "§a" + event.getPlayer().getName()));
+		ComponentBuilder text = Main.prefix().append(event.getPlayer().getName()).color(GREEN);
 		text.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/info " + event.getPlayer().getName()));
-		text.append(ChatColor.translateAlternateColorCodes('§', " §7is possibly an alt of "));
+		text.append("is possibly an alt of ").retain(FormatRetention.NONE).color(GRAY);
 		
 		for (int i = 0; i < alts.keySet().size(); i++) {
 			
-			text.append(ChatColor.translateAlternateColorCodes('§', "§a" + alts.keySet().toArray()[i]));
+			text.append((String) alts.keySet().toArray()[i]).color(GREEN);
 			text.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/info " + alts.keySet().toArray()[i]));
 			
-			if (alts.keySet().size() > 1 && i < (alts.keySet().size() - 1)) text.append(ChatColor.translateAlternateColorCodes('§', "§7, "));
+			if (alts.keySet().size() > 1 && i < (alts.keySet().size() - 1)) text.append(", ").retain(FormatRetention.NONE).color(GRAY);
 			
 		}
 		
-		text.append(ChatColor.translateAlternateColorCodes('§', "§7."));
+		text.append(".").retain(FormatRetention.NONE).color(GRAY);
 		
 		for (ProxiedPlayer player : event.getServer().getInfo().getPlayers()) {
 			
