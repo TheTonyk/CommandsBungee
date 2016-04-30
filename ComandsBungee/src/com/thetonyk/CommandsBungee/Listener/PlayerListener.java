@@ -219,7 +219,7 @@ public class PlayerListener implements Listener {
 			long seconds = TimeUnit.MILLISECONDS.toSeconds(duration) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration));
 			
 			((ProxiedPlayer) event.getSender()).sendMessage(Main.prefix().append("Your are muted for:").color(GRAY).create());
-			ComponentBuilder text = new ComponentBuilder("");
+			ComponentBuilder text = Main.prefix();
 			if (days > 0) text.append(String.valueOf(days)).color(GREEN).append(" days, ").color(GRAY);
 			if (hours > 0) text.append(String.valueOf(hours)).color(GREEN).append(" hours, ").color(GRAY);
 			if (minutes > 0) text.append(String.valueOf(minutes)).color(GREEN).append(" minutes, ").color(GRAY);
@@ -241,7 +241,7 @@ public class PlayerListener implements Listener {
 		
 		ComponentBuilder text = Main.prefix().append(event.getPlayer().getName()).color(GREEN);
 		text.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/info " + event.getPlayer().getName()));
-		text.append("is possibly an alt of ").retain(FormatRetention.NONE).color(GRAY);
+		text.append(" is possibly an alt of ").retain(FormatRetention.NONE).color(GRAY);
 		
 		for (int i = 0; i < alts.keySet().size(); i++) {
 			
