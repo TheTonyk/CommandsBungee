@@ -93,6 +93,8 @@ public class PlayerListener implements Listener {
 		PlayerUtils.leaveUpdatePlayer(event.getPlayer());
 		PermissionsUtils.clearPermissions(event.getPlayer());
 		
+		if (Main.newPseudo.containsKey(event.getPlayer().getUniqueId())) Main.newPseudo.remove(event.getPlayer().getUniqueId());
+		
 	}
 	
 	@EventHandler
@@ -259,6 +261,18 @@ public class PlayerListener implements Listener {
 			if (!player.hasPermission("proxy.alerts")) continue;
 	
 			player.sendMessage(text.create());
+			
+		}
+		
+		if (Main.newPseudo.containsKey(event.getPlayer().getUniqueId())) {
+			
+			ComponentBuilder newPseudo = Main.prefix().append("'").color(GRAY).append(Main.newPseudo.get(event.getPlayer().getUniqueId())).color(GOLD).append("' changed his name for '").color(GRAY).append(event.getPlayer().getName()).color(GOLD).append("'.").color(GRAY);
+			
+			for (ProxiedPlayer player : event.getServer().getInfo().getPlayers()) {
+				
+				player.sendMessage(newPseudo.create());
+				
+			}
 			
 		}
 		

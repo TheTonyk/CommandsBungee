@@ -2,6 +2,7 @@ package com.thetonyk.CommandsBungee;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import com.thetonyk.CommandsBungee.Commands.AboutCommand;
 import com.thetonyk.CommandsBungee.Commands.BanCommand;
@@ -33,6 +34,7 @@ public class Main extends Plugin {
 	public static Main proxy;
 	
 	public static Map<ProxiedPlayer, String> cmdspy = new HashMap<ProxiedPlayer, String>();
+	public static Map<UUID, String> newPseudo = new HashMap<UUID, String>();
 	
 	@Override
 	public void onEnable() {

@@ -170,22 +170,24 @@ public class PlayerUtils {
 		try {
 			
 			Statement sql = DatabaseUtils.getConnection().createStatement();
-			ResultSet ips = sql.executeQuery("SELECT * FROM users WHERE uuid = '" + uuid + "';");
+			ResultSet req = sql.executeQuery("SELECT * FROM users WHERE uuid = '" + uuid + "';");
 			
-			if (ips.next()) {
+			if (req.next()) {
+				
+				if (!req.getString("name").equalsIgnoreCase(player)) Main.newPseudo.put(uuid, req.getString("name"));
 			
-				for (String playerIP : ips.getString("ip").split(";")) {
+				for (String playerIP : req.getString("ip").split(";")) {
 					
 					if (playerIP.equalsIgnoreCase(ip)) newIP = false;
 					
 				}
 				
-				oldIPs = ips.getString("ip");
+				oldIPs = req.getString("ip");
 				
 			}
 			
 			sql.close();
-			ips.close();
+			req.close();
 		
 		} catch (SQLException exception) {
 			
@@ -211,7 +213,7 @@ public class PlayerUtils {
 	
 	public static void joinUpdatePlayer(String player, UUID uuid, String ip) {
 		
-		if (!exist(player)) {
+		if (!exist(Main.proxy.getProxy().getPlayer(uuid))) {
 			
 			try {
 				
