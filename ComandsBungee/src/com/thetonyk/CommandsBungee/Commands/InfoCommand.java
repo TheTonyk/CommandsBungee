@@ -142,7 +142,7 @@ public class InfoCommand extends Command implements TabExecutor {
 		sender.sendMessage(muted.create());
 		sender.sendMessage(new ComponentBuilder("⫸ ").color(DARK_GRAY).append("First Join: ").color(GRAY).append(format.format(firstJoin)).color(GOLD).create());
 		sender.sendMessage(new ComponentBuilder("⫸ ").color(DARK_GRAY).append("Last Join: ").color(GRAY).append(format.format(lastJoin)).color(GOLD).create());
-		sender.sendMessage(new ComponentBuilder("⫸ ").color(DARK_GRAY).append("Last Quit: ").color(GRAY).append(lastQuit == -1 ? "Never" : format.format(lastJoin)).color(GOLD).create());
+		sender.sendMessage(new ComponentBuilder("⫸ ").color(DARK_GRAY).append("Last Quit: ").color(GRAY).append(lastQuit == -1 ? "Never" : format.format(lastQuit)).color(GOLD).create());
 		
 		if (PlayerUtils.getRank(sender.getName()) == Rank.ADMIN) { 
 		
