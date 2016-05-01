@@ -5,12 +5,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TimeZone;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import com.thetonyk.CommandsBungee.Main;
 import com.thetonyk.CommandsBungee.Commands.BanCommand;
+import com.thetonyk.CommandsBungee.Commands.IgnoreCommand;
+import com.thetonyk.CommandsBungee.Utils.DatabaseUtils;
 import com.thetonyk.CommandsBungee.Utils.PermissionsUtils;
 import com.thetonyk.CommandsBungee.Utils.PlayerUtils;
 import com.thetonyk.CommandsBungee.Utils.PlayerUtils.Rank;
@@ -84,6 +89,28 @@ public class PlayerListener implements Listener {
 		}
 		
 		PlayerUtils.joinUpdatePlayer(event.getPlayer().getName(), event.getPlayer().getUniqueId(), event.getPlayer().getAddress().getAddress().getHostAddress());
+		
+		if (!IgnoreCommand.ignored.containsKey(event.getPlayer().getUniqueId())) return;
+		
+		long lastQuit = 0;
+		
+		try {
+			
+			Statement sql = DatabaseUtils.getConnection().createStatement();
+			ResultSet req = sql.executeQuery("SELECT * FROM users WHERE uuid ='" + event.getPlayer().getUniqueId() + "';");
+			
+			if (req.next()) lastQuit = Long.parseLong(req.getString("lastQuit"));
+			
+			sql.close();
+			req.close();
+			
+		} catch (SQLException exception) {
+			
+			Main.proxy.getLogger().severe("[PlayerListener] Error to get last quit of player " + event.getPlayer().getName() + ".");
+			
+		}
+		
+		if ((new Date().getTime() - lastQuit) > 3600000l) IgnoreCommand.ignored.remove(event.getPlayer().getUniqueId());
 		
 	}
 	

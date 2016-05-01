@@ -11,6 +11,7 @@ import com.thetonyk.CommandsBungee.Commands.GBroadcastCommand;
 import com.thetonyk.CommandsBungee.Commands.CmdspyCommand;
 import com.thetonyk.CommandsBungee.Commands.HelpCommand;
 import com.thetonyk.CommandsBungee.Commands.HubCommand;
+import com.thetonyk.CommandsBungee.Commands.IgnoreCommand;
 import com.thetonyk.CommandsBungee.Commands.InfoCommand;
 import com.thetonyk.CommandsBungee.Commands.KickCommand;
 import com.thetonyk.CommandsBungee.Commands.MsgCommand;
@@ -62,6 +63,7 @@ public class Main extends Plugin {
 		this.getProxy().getPluginManager().registerCommand(this, new HubCommand());
 		this.getProxy().getPluginManager().registerCommand(this, new HelpCommand());
 		this.getProxy().getPluginManager().registerCommand(this, new BroadcastCommand());
+		this.getProxy().getPluginManager().registerCommand(this, new IgnoreCommand());
 		
 		this.getProxy().registerChannel("CommandsBungee");
 		this.getProxy().getPluginManager().registerListener(this, new MessengerListener());

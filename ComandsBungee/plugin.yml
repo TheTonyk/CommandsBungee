@@ -64,4 +64,6 @@ commands:
         description: Teleport back to the hub
         usage: /hub
         aliases: [lobby]
-        
+    ignore:
+        description: Ignore a player
+        usage: /ignore

@@ -55,14 +55,14 @@ public class MsgCommand extends Command implements TabExecutor {
 			
 		}
 		
-		if (PlayerUtils.exist(Main.proxy.getProxy().getPlayer(sender.getName())) && PlayerUtils.getPrivatesState(Main.proxy.getProxy().getPlayer(sender.getName())) == 0) {
+		if (PlayerUtils.getPrivatesState(Main.proxy.getProxy().getPlayer(sender.getName())) == 0) {
 			
 			sender.sendMessage(Main.prefix().append("Your privates messages are disabled.").create());
 			return;
 			
 		}
 		
-		if (PlayerUtils.exist(Main.proxy.getProxy().getPlayer(args[0])) && PlayerUtils.getPrivatesState(Main.proxy.getProxy().getPlayer(args[0])) == 0) {
+		if (PlayerUtils.getPrivatesState(Main.proxy.getProxy().getPlayer(args[0])) == 0) {
 			
 			sender.sendMessage(Main.prefix().append("You can't send messages to '").color(GRAY).append(Main.proxy.getProxy().getPlayer(args[0]).getName()).color(GOLD).append("'.").color(GRAY).create());
 			return;
@@ -79,13 +79,6 @@ public class MsgCommand extends Command implements TabExecutor {
 		
 		sender.sendMessage(new ComponentBuilder("Private ").color(GOLD).append("| ").color(DARK_GRAY).append(Main.proxy.getProxy().getPlayer(args[0]).getName()).color(GRAY).append(" ⫷ ").color(RED).append(message.toString()).color(WHITE).create());
 		
-		ComponentBuilder text = new ComponentBuilder("Private ").color(GOLD).append("| ").color(DARK_GRAY).append(sender.getName()).color(GRAY).append(" ⫸ ").color(GREEN).append(message.toString()).color(WHITE);
-		text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Reply to ").color(GRAY).append(sender.getName()).color(GREEN).append(".").color(GRAY).create()));
-		text.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + sender.getName() + " "));
-		Main.proxy.getProxy().getPlayer(args[0]).sendMessage(text.create());
-		
-		lastMsg.put(Main.proxy.getProxy().getPlayer(args[0]).getName(), sender.getName());
-		
 		cooldown.add(sender.getName());
 		
 		Main.proxy.getProxy().getScheduler().schedule(Main.proxy, new Runnable() {
@@ -98,6 +91,14 @@ public class MsgCommand extends Command implements TabExecutor {
 			
 		}, 2, TimeUnit.SECONDS);
 		
+		if (IgnoreCommand.ignored.containsKey(Main.proxy.getProxy().getPlayer(args[0]).getUniqueId()) && IgnoreCommand.ignored.get(Main.proxy.getProxy().getPlayer(args[0]).getUniqueId()).contains(Main.proxy.getProxy().getPlayer(sender.getName()).getUniqueId())) return;
+		
+		lastMsg.put(Main.proxy.getProxy().getPlayer(args[0]).getName(), sender.getName());
+		
+		ComponentBuilder text = new ComponentBuilder("Private ").color(GOLD).append("| ").color(DARK_GRAY).append(sender.getName()).color(GRAY).append(" ⫸ ").color(GREEN).append(message.toString()).color(WHITE);
+		text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Reply to ").color(GRAY).append(sender.getName()).color(GREEN).append(".").color(GRAY).create()));
+		text.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + sender.getName() + " "));
+		Main.proxy.getProxy().getPlayer(args[0]).sendMessage(text.create());
 		return;
 		
 	}
