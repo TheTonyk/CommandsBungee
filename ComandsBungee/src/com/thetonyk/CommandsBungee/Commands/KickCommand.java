@@ -55,6 +55,13 @@ public class KickCommand extends Command implements TabExecutor {
 			
 		}
 		
+		if (PlayerUtils.getRank(args[0]) != Rank.PLAYER && PlayerUtils.getRank(sender.getName()) != Rank.ADMIN) {
+			
+			sender.sendMessage(Main.prefix().append("'").color(GRAY).append(args[0]).color(GOLD).append("' can't only be kicked by an Admin.").color(GRAY).create());
+			return;
+			
+		}
+		
 		if (args.length == 1) {
 			
 			sender.sendMessage(Main.prefix().append("Kick of '").color(GRAY).append(args[0]).color(GOLD).append("'...").color(GRAY).create());

@@ -12,6 +12,7 @@ import com.thetonyk.CommandsBungee.Main;
 import com.thetonyk.CommandsBungee.Utils.DatabaseUtils;
 import com.thetonyk.CommandsBungee.Utils.DateUtils;
 import com.thetonyk.CommandsBungee.Utils.PlayerUtils;
+import com.thetonyk.CommandsBungee.Utils.PlayerUtils.Rank;
 
 import static net.md_5.bungee.api.ChatColor.*;
 import net.md_5.bungee.api.CommandSender;
@@ -54,6 +55,20 @@ public class BanCommand extends Command implements TabExecutor {
 		if (!PlayerUtils.exist(args[0])) {
 			
 			sender.sendMessage(Main.prefix().append("'").color(GRAY).append(args[0]).color(GOLD).append("' has never come on the server.").color(GRAY).create());
+			return;
+			
+		}
+		
+		if (PlayerUtils.getRank(args[0]) != Rank.PLAYER && PlayerUtils.getRank(sender.getName()) != Rank.ADMIN) {
+			
+			sender.sendMessage(Main.prefix().append("'").color(GRAY).append(args[0]).color(GOLD).append("' can't only be banned by an Admin.").color(GRAY).create());
+			return;
+			
+		}
+		
+		if (PlayerUtils.isBanned(PlayerUtils.getUUID(args[0])) > 0) {
+			
+			sender.sendMessage(Main.prefix().append("'").color(GRAY).append(args[0]).color(GOLD).append("' is already banned.").color(GRAY).create());
 			return;
 			
 		}

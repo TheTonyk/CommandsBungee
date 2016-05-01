@@ -1,3 +1,4 @@
+
 package com.thetonyk.CommandsBungee.Commands;
 
 import java.sql.ResultSet;
@@ -6,9 +7,11 @@ import java.sql.Statement;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
 import java.util.UUID;
 
 import com.thetonyk.CommandsBungee.Main;
@@ -99,6 +102,44 @@ public class InfoCommand extends Command implements TabExecutor {
 		sender.sendMessage(new ComponentBuilder("⫸ ").color(DARK_GRAY).append("Rank: ").color(GRAY).append(rank.getName()).color(GOLD).create());
 		sender.sendMessage(new ComponentBuilder("⫸ ").color(DARK_GRAY).append("Status: ").color(GRAY).append(Main.proxy.getProxy().getPlayer(uuid) == null ? "Offline" : "Online").color(Main.proxy.getProxy().getPlayer(uuid) == null ? RED : GREEN).create());
 		if (Main.proxy.getProxy().getPlayer(uuid) != null) sender.sendMessage(new ComponentBuilder("⫸ ").color(DARK_GRAY).append("Server: ").color(GRAY).append(Main.proxy.getProxy().getPlayer(uuid).getServer().getInfo().getName()).color(GOLD).create());
+		
+		ComponentBuilder banned = new ComponentBuilder("⫸ ").color(DARK_GRAY).append("Banned: ").color(GRAY);
+		
+		if (PlayerUtils.isBanned(uuid) == 0) banned.append("Not currently").color(RED);
+		else {
+			
+			long duration = (PlayerUtils.getBanDuration(PlayerUtils.isBanned(uuid)) - (new Date().getTime() - PlayerUtils.getBanDate(PlayerUtils.isBanned(uuid))));
+			long days = TimeUnit.MILLISECONDS.toDays(duration); 
+			long hours = TimeUnit.MILLISECONDS.toHours(duration) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(duration)); 
+			long minutes = TimeUnit.MILLISECONDS.toMinutes(duration) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(duration));
+			
+			if (days > 0) banned.append(String.valueOf(days)).color(GREEN).append("d, ").color(GRAY);
+			if (hours > 0) banned.append(String.valueOf(hours)).color(GREEN).append("h, ").color(GRAY);
+			if (minutes > 0) banned.append(String.valueOf(minutes)).color(GREEN).append("m.").color(GRAY);
+			else banned.append("0").color(GREEN).append("m.").color(GRAY);
+			
+		}
+		
+		ComponentBuilder muted = new ComponentBuilder("⫸ ").color(DARK_GRAY).append("Muted: ").color(GRAY);
+		
+		if (PlayerUtils.isMuted(uuid) == 0) muted.append("Not currently").color(RED);
+		else {
+			
+			long duration = (PlayerUtils.getMuteDuration(PlayerUtils.isMuted(uuid)) - (new Date().getTime() - PlayerUtils.getMuteDate(PlayerUtils.isMuted(uuid))));
+			long days = TimeUnit.MILLISECONDS.toDays(duration); 
+			long hours = TimeUnit.MILLISECONDS.toHours(duration) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(duration)); 
+			long minutes = TimeUnit.MILLISECONDS.toMinutes(duration) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(duration));
+			long seconds = TimeUnit.MILLISECONDS.toSeconds(duration) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration));
+			
+			if (days > 0) muted.append(String.valueOf(days)).color(GREEN).append("d, ").color(GRAY);
+			if (hours > 0) muted.append(String.valueOf(hours)).color(GREEN).append("h, ").color(GRAY);
+			if (minutes > 0) muted.append(String.valueOf(minutes)).color(GREEN).append("m, ").color(GRAY);
+			muted.append(String.valueOf(seconds)).color(GREEN).append("s.").color(GRAY);
+			
+		}
+		
+		sender.sendMessage(banned.create());
+		sender.sendMessage(muted.create());
 		sender.sendMessage(new ComponentBuilder("⫸ ").color(DARK_GRAY).append("First Join: ").color(GRAY).append(format.format(firstJoin)).color(GOLD).create());
 		sender.sendMessage(new ComponentBuilder("⫸ ").color(DARK_GRAY).append("Last Join: ").color(GRAY).append(format.format(lastJoin)).color(GOLD).create());
 		sender.sendMessage(new ComponentBuilder("⫸ ").color(DARK_GRAY).append("Last Quit: ").color(GRAY).append(lastQuit == -1 ? "Never" : format.format(lastJoin)).color(GOLD).create());

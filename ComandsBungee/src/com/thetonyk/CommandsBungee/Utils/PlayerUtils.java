@@ -540,8 +540,6 @@ public class PlayerUtils {
 			Statement sql = DatabaseUtils.getConnection().createStatement();
 			ResultSet req = sql.executeQuery("SELECT * FROM users WHERE ip LIKE '%" + ip + "%';");
 			
-			
-			
 			while (req.next()) {
 				
 				for (String playerIP : req.getString("ip").split(";")) {
@@ -894,7 +892,7 @@ public class PlayerUtils {
 			Statement sql = DatabaseUtils.getConnection().createStatement();
 			ResultSet req = sql.executeQuery("SELECT * FROM mute WHERE date = '" + date + "' AND player = " + PlayerUtils.getId(name) + ";");
 			
-			if (req.next()) req.getInt("id");
+			if (req.next()) id = req.getInt("id");
 			
 			sql.close();
 			req.close();
