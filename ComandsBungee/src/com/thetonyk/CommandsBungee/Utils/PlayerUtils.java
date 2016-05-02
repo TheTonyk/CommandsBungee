@@ -529,7 +529,7 @@ public class PlayerUtils {
 			
 		}
 		
-		List<UUID> ignored = ignoredPlayers == "" ? new ArrayList<UUID>() : new Gson().fromJson(ignoredPlayers, new TypeToken<List<UUID>>(){}.getType());
+		List<UUID> ignored = new Gson().fromJson(ignoredPlayers, new TypeToken<List<UUID>>(){}.getType());
 		return ignored;
 		
 	}

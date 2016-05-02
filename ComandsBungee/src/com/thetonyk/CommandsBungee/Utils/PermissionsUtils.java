@@ -29,7 +29,6 @@ public class PermissionsUtils {
 		player.setPermission("proxy.cmdspy", true);
 		player.setPermission("proxy.broadcast", true);
 		player.setPermission("proxy.private", true);
-		player.setPermission("proxy.chat", true);
 		
 		if (rank == Rank.STAFF) return;
 		
