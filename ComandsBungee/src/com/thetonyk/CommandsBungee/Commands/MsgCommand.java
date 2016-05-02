@@ -103,6 +103,8 @@ public class MsgCommand extends Command implements TabExecutor {
 			
 			if (PlayerUtils.getRank(sender.getName()) == Rank.ADMIN && PlayerUtils.getRank(player.getKey().getName()) != Rank.ADMIN) continue;
 			
+			if (PlayerUtils.getRank(Main.proxy.getProxy().getPlayer(args[0]).getName()) == Rank.ADMIN && PlayerUtils.getRank(player.getKey().getName()) != Rank.ADMIN) continue;
+			
 			if (!Main.proxy.getProxy().getPlayer(sender.getName()).getServer().getInfo().getName().equalsIgnoreCase(player.getValue()) && !player.getValue().equalsIgnoreCase("all")) continue;
 			player.getKey().sendMessage(new ComponentBuilder(sender.getName()).color(DARK_GREEN).append(" ⫸ ").color(DARK_GRAY).append(Main.proxy.getProxy().getPlayer(args[0]).getName()).color(DARK_GREEN).append(": ").color(DARK_GRAY).append(message.toString()).color(GRAY).italic(true).create());
 			
