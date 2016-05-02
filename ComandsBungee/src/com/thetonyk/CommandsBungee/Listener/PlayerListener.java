@@ -11,13 +11,13 @@ import java.util.concurrent.TimeUnit;
 
 import com.thetonyk.CommandsBungee.Main;
 import com.thetonyk.CommandsBungee.Commands.BanCommand;
+import com.thetonyk.CommandsBungee.Commands.ChatCommand;
 import com.thetonyk.CommandsBungee.Utils.PermissionsUtils;
 import com.thetonyk.CommandsBungee.Utils.PlayerUtils;
 import com.thetonyk.CommandsBungee.Utils.PlayerUtils.Rank;
 
 import static net.md_5.bungee.api.ChatColor.*;
 import net.md_5.bungee.api.ServerPing;
-import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.ComponentBuilder.FormatRetention;
@@ -37,7 +37,8 @@ public class PlayerListener implements Listener {
 	public void onProxyPing (ProxyPingEvent event) {
 		
 		int version = event.getResponse().getVersion().getProtocol();
-		BaseComponent text = new ComponentBuilder("                    §6§k|||§r §a§lCommandsPVP §r§6§k|||§r\n§a⫸       §61.8 §7& §61.9 §7Arenas §a| §7Follow §b@CommandsPVP      §a⫷").create()[0];
+		ComponentBuilder text = new ComponentBuilder("                    §6§k|||§r §a§lCommandsPVP §r§6§k|||§r\n§a⫸       §61.8 §7& §61.9 §7Arenas §a| §7Follow §b@CommandsPVP      §a⫷");
+		if (event.getConnection().getVirtualHost().getHostName().equalsIgnoreCase("92.222.234.237")) text = new ComponentBuilder("                    §6§k|||§r §a§lCommandsPVP §r§6§k|||§r\n§a⫸       §6UHC §7coming soon §a| §7Follow §b@CommandsPVP      §a⫷");
 		ServerPing.Protocol protocol;
 		
 		if (version == 47 || version == 107 || version == 108 || version == 109) {
@@ -56,9 +57,12 @@ public class PlayerListener implements Listener {
 		playersList[1] = new ServerPing.PlayerInfo(" §7You can connect in §61.8.x §7and §61.9.x §7Minecraft versions. ", UUID.randomUUID());
 		playersList[2] = new ServerPing.PlayerInfo(" ", UUID.randomUUID());
 		
-		ServerPing.Players players = new ServerPing.Players(250, Main.proxy.getProxy().getOnlineCount(), playersList);
+		int count = Main.proxy.getProxy().getOnlineCount();
+		if (event.getConnection().getVirtualHost().getHostName().equalsIgnoreCase("92.222.234.237")) count = Main.proxy.getProxy().getServerInfo("uhc").getPlayers().size();
 		
-		event.getResponse().setDescriptionComponent(text);
+		ServerPing.Players players = new ServerPing.Players(250, count, playersList);
+		
+		event.getResponse().setDescriptionComponent(text.create()[0]);
 		event.getResponse().setVersion(protocol);
 		event.getResponse().setPlayers(players);
 		
@@ -193,7 +197,7 @@ public class PlayerListener implements Listener {
 				}
 			
 			
-				if (command.startsWith("bukkit:") || command.startsWith("minecraft:") || command.startsWith("protocollib:") || command.startsWith("spigot:") || command.startsWith("uhc:")) {
+				if (command.startsWith("bukkit:") || command.startsWith("minecraft:") || command.startsWith("protocollib:") || command.startsWith("spigot:") || command.startsWith("uhc:") || command.startsWith("pregenerator:") || command.startsWith("viaversion:") || command.startsWith("commandshub:") || command.startsWith("commandsarena:") || command.startsWith("commandsparkour:")) {
 					
 					player.sendMessage(new ComponentBuilder("Unknown command.").create());
 					event.setCancelled(true);
@@ -207,11 +211,19 @@ public class PlayerListener implements Listener {
 		
 		if (event.getSender() instanceof ProxiedPlayer) {
 			
+			if (event.isCommand() && !event.getMessage().substring(1).startsWith("msg") && !event.getMessage().substring(1).startsWith("tell") && !event.getMessage().substring(1).startsWith("w") && !event.getMessage().substring(1).startsWith("reply") && !event.getMessage().substring(1).startsWith("r")) return;
+			
+			if ((ChatCommand.muted.containsKey("all") && ChatCommand.muted.get("all")) || (ChatCommand.muted.containsKey(((ProxiedPlayer) event.getSender()).getServer().getInfo().getName()) && ChatCommand.muted.get(((ProxiedPlayer) event.getSender()).getServer().getInfo().getName())) && PlayerUtils.getRank(((ProxiedPlayer) event.getSender()).getName()) != Rank.ADMIN && PlayerUtils.getRank(((ProxiedPlayer) event.getSender()).getName()) != Rank.HOST && PlayerUtils.getRank(((ProxiedPlayer) event.getSender()).getName()) != Rank.STAFF && PlayerUtils.getRank(((ProxiedPlayer) event.getSender()).getName()) != Rank.MOD) {
+				
+				event.setCancelled(true);
+				((ProxiedPlayer) event.getSender()).sendMessage(Main.prefix().append("The chat is currently muted.").color(GRAY).create());
+				return;
+				
+			}
+			
 			int muteId = PlayerUtils.isMuted(((ProxiedPlayer) event.getSender()).getUniqueId());
 			
 			if (muteId <= 0) return;
-			
-			if (event.isCommand() && !event.getMessage().substring(1).startsWith("msg") && !event.getMessage().substring(1).startsWith("tell") && !event.getMessage().substring(1).startsWith("w") && !event.getMessage().substring(1).startsWith("reply") && !event.getMessage().substring(1).startsWith("r")) return;
 			
 			event.setCancelled(true);
 			

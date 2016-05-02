@@ -7,6 +7,7 @@ import java.util.UUID;
 import com.thetonyk.CommandsBungee.Commands.AboutCommand;
 import com.thetonyk.CommandsBungee.Commands.BanCommand;
 import com.thetonyk.CommandsBungee.Commands.BroadcastCommand;
+import com.thetonyk.CommandsBungee.Commands.ChatCommand;
 import com.thetonyk.CommandsBungee.Commands.GBroadcastCommand;
 import com.thetonyk.CommandsBungee.Commands.CmdspyCommand;
 import com.thetonyk.CommandsBungee.Commands.HelpCommand;
@@ -64,6 +65,7 @@ public class Main extends Plugin {
 		this.getProxy().getPluginManager().registerCommand(this, new HelpCommand());
 		this.getProxy().getPluginManager().registerCommand(this, new BroadcastCommand());
 		this.getProxy().getPluginManager().registerCommand(this, new IgnoreCommand());
+		this.getProxy().getPluginManager().registerCommand(this, new ChatCommand());
 		
 		this.getProxy().registerChannel("CommandsBungee");
 		this.getProxy().getPluginManager().registerListener(this, new MessengerListener());
