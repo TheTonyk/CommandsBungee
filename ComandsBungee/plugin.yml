@@ -67,3 +67,6 @@ commands:
     ignore:
         description: Ignore a player
         usage: /ignore
+    chat:
+        description: Chat Utils
+        usage: /chat
