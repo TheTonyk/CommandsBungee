@@ -1,9 +1,7 @@
 package com.thetonyk.CommandsBungee.Commands;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import com.thetonyk.CommandsBungee.Main;
@@ -12,13 +10,12 @@ import com.thetonyk.CommandsBungee.Utils.PlayerUtils.Rank;
 
 import static net.md_5.bungee.api.ChatColor.*;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.TabExecutor;
 
 public class IgnoreCommand extends Command implements TabExecutor {
-	
-	public static Map<UUID, List<UUID>> ignored = new HashMap<>();
 	
 	public IgnoreCommand() {
 		
@@ -29,9 +26,30 @@ public class IgnoreCommand extends Command implements TabExecutor {
 	@Override
 	public void execute(CommandSender sender, String[] args) {
 		
+		List<UUID> ignoredPlayers = PlayerUtils.getIgnoredPlayers(Main.proxy.getProxy().getPlayer(sender.getName()).getUniqueId()) == null ? new ArrayList<UUID>() : PlayerUtils.getIgnoredPlayers(Main.proxy.getProxy().getPlayer(sender.getName()).getUniqueId());
+		
 		if (args.length < 1) {
 			
 			sender.sendMessage(Main.prefix().append("Usage: /ignore <player>").color(GRAY).create());
+			
+			if (!ignoredPlayers.isEmpty()) {
+				
+				ComponentBuilder players = Main.prefix().append("Ignored players: ").color(GRAY);
+				int i = 1;
+				
+				for (UUID player : ignoredPlayers) {
+					
+					players.append(PlayerUtils.getName(PlayerUtils.getId(player)) + "").color(GREEN);
+					if (i < ignoredPlayers.size()) players.append(", ").color(GRAY);
+					else players.append(".").color(GRAY);
+					i++;
+					
+				}
+				
+				sender.sendMessage(players.create());
+				
+			}
+			
 			return;
 			
 		}
@@ -57,21 +75,19 @@ public class IgnoreCommand extends Command implements TabExecutor {
 			
 		}
 		
-		List<UUID> ignoredPlayers = ignored.containsKey(Main.proxy.getProxy().getPlayer(sender.getName()).getUniqueId()) ? ignored.get(Main.proxy.getProxy().getPlayer(sender.getName()).getUniqueId()) : new ArrayList<UUID>();
-		
 		if (ignoredPlayers.contains(PlayerUtils.getUUID(args[0]))) {
 			
 			ignoredPlayers.remove(PlayerUtils.getUUID(args[0]));
-			ignored.put(Main.proxy.getProxy().getPlayer(sender.getName()).getUniqueId(), ignoredPlayers);
 			sender.sendMessage(Main.prefix().append("The player '").color(GRAY).append(args[0]).color(GOLD).append("' is no longer ignored.").color(GRAY).create());
-			return;
 			
+		} else {
+		
+			ignoredPlayers.add(PlayerUtils.getUUID(args[0]));
+			sender.sendMessage(Main.prefix().append("The player '").color(GRAY).append(args[0]).color(GOLD).append("' is now ignored.").color(GRAY).create());
+	
 		}
 		
-		ignoredPlayers.add(PlayerUtils.getUUID(args[0]));
-		ignored.put(Main.proxy.getProxy().getPlayer(sender.getName()).getUniqueId(), ignoredPlayers);
-		sender.sendMessage(Main.prefix().append("The player '").color(GRAY).append(args[0]).color(GOLD).append("' is now ignored.").color(GRAY).create());
-		return;
+		PlayerUtils.setIgnoredPlayers(Main.proxy.getProxy().getPlayer(sender.getName()).getUniqueId(), ignoredPlayers);
 		
 	}
 	

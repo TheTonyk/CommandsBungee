@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.thetonyk.CommandsBungee.Main;
 import com.thetonyk.CommandsBungee.Utils.DatabaseUtils;
 import com.thetonyk.CommandsBungee.Utils.PlayerUtils;
@@ -220,7 +223,7 @@ public class PlayerUtils {
 				Statement sql = DatabaseUtils.getConnection().createStatement();
 				
 				sql.executeUpdate("INSERT INTO users (`name`, `uuid`, `ip`, `firstJoin`, `lastJoin`, `lastQuit`, `rank`, `muteState`, `muteReason`, `muteTime`) VALUES ('" + player + "', '" + uuid + "', '" + ip + ";', '" + new Date().getTime() + "', '" + new Date().getTime() + "', '0', 'PLAYER', false, '0', '-1');");
-				sql.executeUpdate("INSERT INTO settings (`id`, `players`, `chat`, `mentions`, `private`) VALUES ('" + PlayerUtils.getId(uuid) + "', 1, 1, 1, 1);");
+				sql.executeUpdate("INSERT INTO settings (`id`, `players`, `chat`, `mentions`, `private`, `ignored`) VALUES ('" + PlayerUtils.getId(uuid) + "', 1, 1, 1, 1, '');");
 				
 				sql.close();
 				
@@ -455,6 +458,98 @@ public class PlayerUtils {
 		}
 		
 		return name;
+		
+	}
+	
+	public static int getChatVisibility (UUID player) {
+		
+		int chatVisibility = 0;
+		
+		try {
+			
+			Statement sql = DatabaseUtils.getConnection().createStatement();
+			ResultSet req = sql.executeQuery("SELECT chat FROM settings WHERE id = " + PlayerUtils.getId(player) + ";");
+			
+			if (req.next()) chatVisibility = req.getInt("chat");
+			
+			sql.close();
+			req.close();
+
+		} catch (SQLException exception) {
+			
+			Main.proxy.getLogger().severe("[PlayerUtils] Error to get chat setting of player with UUID " + player + ".");
+			
+		}
+		
+		return chatVisibility;
+		
+	}
+	
+	public static int getMentionsState (UUID player) {
+		
+		int mentionsState = 0;
+		
+		try {
+			
+			Statement sql = DatabaseUtils.getConnection().createStatement();
+			ResultSet req = sql.executeQuery("SELECT mentions FROM settings WHERE id = " + PlayerUtils.getId(player) + ";");
+			
+			if (req.next()) mentionsState = req.getInt("mentions");
+			
+			sql.close();
+			req.close();
+			
+		} catch (SQLException exception) {
+			
+			Main.proxy.getLogger().severe("[PlayerUtils] Error to get mentions setting of player with UUID " + player + ".");
+			
+		}
+		
+		return mentionsState;
+		
+	}
+	
+	public static List<UUID> getIgnoredPlayers (UUID player) {
+		
+		String ignoredPlayers = "";
+		
+		try {
+			
+			Statement sql = DatabaseUtils.getConnection().createStatement();
+			ResultSet req = sql.executeQuery("SELECT ignored FROM settings WHERE id = " + PlayerUtils.getId(player) + ";");
+			
+			if (req.next()) ignoredPlayers = req.getString("ignored");
+			
+			sql.close();
+			req.close();
+			
+		} catch (SQLException exception) {
+			
+			Main.proxy.getLogger().severe("[PlayerUtils] Error to get ignored players of player with UUID " + player + ".");
+			
+		}
+		
+		List<UUID> ignored = new Gson().fromJson(ignoredPlayers, new TypeToken<List<UUID>>(){}.getType());
+		return ignored;
+		
+	}
+	
+	public static void setIgnoredPlayers (UUID player, List<UUID> ignoredPlayers) {
+		
+		Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+		String ignored = gson.toJson(ignoredPlayers);
+		
+		try {
+			
+			Statement sql = DatabaseUtils.getConnection().createStatement();
+			sql.executeUpdate("UPDATE settings SET ignored = '" + ignored + "' WHERE id = " + PlayerUtils.getId(player) + ";");
+			sql.close();
+			
+		} catch (SQLException exception) {
+			
+			Main.proxy.getLogger().severe("[PlayerUtils] Error to set ignored players of player with UUID " + player + ".");
+			
+		}
 		
 	}
 	

@@ -91,7 +91,7 @@ public class MsgCommand extends Command implements TabExecutor {
 			
 		}, 2, TimeUnit.SECONDS);
 		
-		if (IgnoreCommand.ignored.containsKey(Main.proxy.getProxy().getPlayer(args[0]).getUniqueId()) && IgnoreCommand.ignored.get(Main.proxy.getProxy().getPlayer(args[0]).getUniqueId()).contains(Main.proxy.getProxy().getPlayer(sender.getName()).getUniqueId())) return;
+		if (PlayerUtils.getIgnoredPlayers(Main.proxy.getProxy().getPlayer(args[0]).getUniqueId()) != null && PlayerUtils.getIgnoredPlayers(Main.proxy.getProxy().getPlayer(args[0]).getUniqueId()).contains(Main.proxy.getProxy().getPlayer(sender.getName()).getUniqueId())) return;
 		
 		lastMsg.put(Main.proxy.getProxy().getPlayer(args[0]).getName(), sender.getName());
 		

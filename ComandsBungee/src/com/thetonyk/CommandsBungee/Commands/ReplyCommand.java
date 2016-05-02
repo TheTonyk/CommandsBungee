@@ -58,7 +58,7 @@ public class ReplyCommand extends Command implements TabExecutor {
 			
 		}
 		
-		if (PlayerUtils.getPrivatesState(Main.proxy.getProxy().getPlayer(MsgCommand.lastMsg.get(sender.getName()))) == 0 || (IgnoreCommand.ignored.containsKey(Main.proxy.getProxy().getPlayer(args[0]).getUniqueId()) && IgnoreCommand.ignored.get(Main.proxy.getProxy().getPlayer(args[0]).getUniqueId()).contains(Main.proxy.getProxy().getPlayer(sender.getName())))) {
+		if (PlayerUtils.getPrivatesState(Main.proxy.getProxy().getPlayer(MsgCommand.lastMsg.get(sender.getName()))) == 0) {
 			
 			sender.sendMessage(Main.prefix().append("You can't send messages to '").color(GRAY).append(Main.proxy.getProxy().getPlayer(MsgCommand.lastMsg.get(sender.getName())).getName()).color(GOLD).append("'.").color(GRAY).create());
 			return;
@@ -87,7 +87,7 @@ public class ReplyCommand extends Command implements TabExecutor {
 			
 		}, 2, TimeUnit.SECONDS);
 		
-		if (IgnoreCommand.ignored.containsKey(Main.proxy.getProxy().getPlayer(MsgCommand.lastMsg.get(sender.getName())).getUniqueId()) && IgnoreCommand.ignored.get(Main.proxy.getProxy().getPlayer(MsgCommand.lastMsg.get(sender.getName())).getUniqueId()).contains(Main.proxy.getProxy().getPlayer(sender.getName()).getUniqueId())) return;
+		if (PlayerUtils.getIgnoredPlayers(Main.proxy.getProxy().getPlayer(MsgCommand.lastMsg.get(sender.getName())).getUniqueId()) != null && PlayerUtils.getIgnoredPlayers(Main.proxy.getProxy().getPlayer(MsgCommand.lastMsg.get(sender.getName())).getUniqueId()).contains(Main.proxy.getProxy().getPlayer(sender.getName()).getUniqueId())) return;
 		
 		MsgCommand.lastMsg.put(Main.proxy.getProxy().getPlayer(MsgCommand.lastMsg.get(sender.getName())).getName(), sender.getName());
 		
