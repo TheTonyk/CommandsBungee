@@ -70,3 +70,7 @@ commands:
     chat:
         description: Chat Utils
         usage: /chat
+    socialspy:
+        description: Toggle the social spy
+        usage: /socialspy
+        aliases: [social]

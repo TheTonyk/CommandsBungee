@@ -20,6 +20,7 @@ import com.thetonyk.CommandsBungee.Commands.MuteCommand;
 import com.thetonyk.CommandsBungee.Commands.OrganizeCommand;
 import com.thetonyk.CommandsBungee.Commands.PingCommand;
 import com.thetonyk.CommandsBungee.Commands.ReplyCommand;
+import com.thetonyk.CommandsBungee.Commands.SocialspyCommand;
 import com.thetonyk.CommandsBungee.Commands.PrivateCommand;
 import com.thetonyk.CommandsBungee.Commands.UnbanCommand;
 import com.thetonyk.CommandsBungee.Commands.UnmuteCommand;
@@ -67,6 +68,7 @@ public class Main extends Plugin {
 		this.getProxy().getPluginManager().registerCommand(this, new BroadcastCommand());
 		this.getProxy().getPluginManager().registerCommand(this, new IgnoreCommand());
 		this.getProxy().getPluginManager().registerCommand(this, new ChatCommand());
+		this.getProxy().getPluginManager().registerCommand(this, new SocialspyCommand());
 		
 		this.getProxy().registerChannel("CommandsBungee");
 		this.getProxy().getPluginManager().registerListener(this, new MessengerListener());
