@@ -110,6 +110,8 @@ public class PlayerListener implements Listener {
 				
 				if (player.getKey().getName() == event.getSender().toString()) continue;
 				
+				if (PlayerUtils.getRank(((ProxiedPlayer) event.getSender()).getName()) == Rank.ADMIN && PlayerUtils.getRank(player.getKey().getName()) != Rank.ADMIN) return;
+				
 				if (!Main.proxy.getProxy().getPlayer(event.getSender().toString()).getServer().getInfo().getName().equalsIgnoreCase(player.getValue()) && !player.getValue().equalsIgnoreCase("all")) continue;
 				player.getKey().sendMessage(new ComponentBuilder(event.getSender().toString()).color(DARK_BLUE).append(": ").color(DARK_GRAY).append(event.getMessage()).color(GRAY).italic(true).create());
 				
