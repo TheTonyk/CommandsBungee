@@ -99,7 +99,7 @@ public class MsgCommand extends Command implements TabExecutor {
 		
 		for (Entry<ProxiedPlayer, String> player : Main.socialspy.entrySet()) {
 			
-			if (player.getKey().getName().equalsIgnoreCase(sender.getName())) continue;
+			if (player.getKey().getName().equalsIgnoreCase(sender.getName()) || player.getKey().getName().equalsIgnoreCase(args[0])) continue;
 			
 			if (PlayerUtils.getRank(sender.getName()) == Rank.ADMIN && PlayerUtils.getRank(player.getKey().getName()) != Rank.ADMIN) continue;
 			
