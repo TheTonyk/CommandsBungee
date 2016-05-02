@@ -27,6 +27,7 @@ public class PermissionsUtils {
 		player.setPermission("proxy.organize", true);
 		player.setPermission("proxy.alerts", true);
 		player.setPermission("proxy.cmdspy", true);
+		player.setPermission("proxy.socialspy", true);
 		player.setPermission("proxy.broadcast", true);
 		player.setPermission("proxy.private", true);
 		player.setPermission("proxy.chat", true);

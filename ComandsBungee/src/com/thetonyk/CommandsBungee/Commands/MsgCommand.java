@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import com.thetonyk.CommandsBungee.Main;
 import com.thetonyk.CommandsBungee.Utils.PlayerUtils;
+import com.thetonyk.CommandsBungee.Utils.PlayerUtils.Rank;
 
 import static net.md_5.bungee.api.ChatColor.*;
 import net.md_5.bungee.api.CommandSender;
@@ -94,6 +96,17 @@ public class MsgCommand extends Command implements TabExecutor {
 		if (PlayerUtils.getIgnoredPlayers(Main.proxy.getProxy().getPlayer(args[0]).getUniqueId()) != null && PlayerUtils.getIgnoredPlayers(Main.proxy.getProxy().getPlayer(args[0]).getUniqueId()).contains(Main.proxy.getProxy().getPlayer(sender.getName()).getUniqueId())) return;
 		
 		lastMsg.put(Main.proxy.getProxy().getPlayer(args[0]).getName(), sender.getName());
+		
+		for (Entry<ProxiedPlayer, String> player : Main.socialspy.entrySet()) {
+			
+			if (player.getKey().getName().equalsIgnoreCase(sender.getName())) continue;
+			
+			if (PlayerUtils.getRank(sender.getName()) == Rank.ADMIN && PlayerUtils.getRank(player.getKey().getName()) != Rank.ADMIN) continue;
+			
+			if (!Main.proxy.getProxy().getPlayer(sender.getName()).getServer().getInfo().getName().equalsIgnoreCase(player.getValue()) && !player.getValue().equalsIgnoreCase("all")) continue;
+			player.getKey().sendMessage(new ComponentBuilder(sender.getName()).color(DARK_GREEN).append(" ⫸ ").color(DARK_GRAY).append(Main.proxy.getProxy().getPlayer(args[0]).getName()).color(DARK_GREEN).append(": ").color(DARK_GRAY).append(message.toString()).color(GRAY).italic(true).create());
+			
+		}
 		
 		ComponentBuilder text = new ComponentBuilder("Private ").color(GOLD).append("| ").color(DARK_GRAY).append(sender.getName()).color(GRAY).append(" ⫸ ").color(GREEN).append(message.toString()).color(WHITE);
 		text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Reply to ").color(GRAY).append(sender.getName()).color(GREEN).append(".").color(GRAY).create()));

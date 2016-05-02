@@ -14,18 +14,18 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.TabExecutor;
 
-public class CmdspyCommand extends Command implements TabExecutor {
+public class SocialspyCommand extends Command implements TabExecutor {
 
-	public CmdspyCommand() {
+	public SocialspyCommand() {
 		
-		super("cmdspy", "", "spy");
+		super("socialspy", "", "social");
 		
 	}
 	
 	@Override
     public void execute(CommandSender sender, String[] args) {
 		
-		if (!sender.hasPermission("proxy.cmdspy")) {
+		if (!sender.hasPermission("proxy.socialspy")) {
 			
 			sender.sendMessage(new ComponentBuilder("Unknown command.").create());
     		return;
@@ -34,7 +34,7 @@ public class CmdspyCommand extends Command implements TabExecutor {
 		
 		if (args.length < 1 || (!args[0].equalsIgnoreCase("on") && !args[0].equalsIgnoreCase("off"))) {
 			
-			sender.sendMessage(Main.prefix().append("Usage: /cmdspy <on|off> [server]" + (PlayerUtils.getRank(sender.toString()) == Rank.ADMIN ? " [player]" : "")).color(GRAY).create());
+			sender.sendMessage(Main.prefix().append("Usage: /socialspy <on|off> [server]" + (PlayerUtils.getRank(sender.toString()) == Rank.ADMIN ? " [player]" : "")).color(GRAY).create());
 			return;
 			
 		}
@@ -63,25 +63,25 @@ public class CmdspyCommand extends Command implements TabExecutor {
 		
 		if (args[0].equalsIgnoreCase("off")) {
 			
-			sender.sendMessage(Main.prefix().append("The command spy has been disabled.").color(GRAY).create());
+			sender.sendMessage(Main.prefix().append("The social spy has been disabled.").color(GRAY).create());
 			
-			if (player != Main.proxy.getProxy().getPlayer(sender.toString())) player.sendMessage(Main.prefix().append("The command spy has been disabled.").color(GRAY).create());
+			if (player != Main.proxy.getProxy().getPlayer(sender.toString())) player.sendMessage(Main.prefix().append("The social spy has been disabled.").color(GRAY).create());
 			
-			if (!Main.cmdspy.containsKey(player)) return;
+			if (!Main.socialspy.containsKey(player)) return;
 			
-			Main.cmdspy.remove(player);
+			Main.socialspy.remove(player);
 			
 		}
 		
 		if (args[0].equalsIgnoreCase("on")) {
 			
-			sender.sendMessage(Main.prefix().append("The command spy has been enabled.").color(GRAY).create());
+			sender.sendMessage(Main.prefix().append("The social spy has been enabled.").color(GRAY).create());
 			
-			if (player != Main.proxy.getProxy().getPlayer(sender.toString())) player.sendMessage(Main.prefix().append("The command spy has been enabled.").color(GRAY).create());
+			if (player != Main.proxy.getProxy().getPlayer(sender.toString())) player.sendMessage(Main.prefix().append("The social spy has been enabled.").color(GRAY).create());
 			
 			String server = args.length < 2 ? player.getServer().getInfo().getName() : args[1];
 			
-			Main.cmdspy.put(player, server);
+			Main.socialspy.put(player, server);
 			
 		}
     	
@@ -92,7 +92,7 @@ public class CmdspyCommand extends Command implements TabExecutor {
 		
 		List<String> complete = new ArrayList<String>();
 		
-		if (!sender.hasPermission("proxy.cmdspy")) return complete;
+		if (!sender.hasPermission("proxy.socialspy")) return complete;
 
 		if (args.length == 1) {
 			

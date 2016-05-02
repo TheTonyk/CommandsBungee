@@ -2,16 +2,19 @@ package com.thetonyk.CommandsBungee.Commands;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import com.thetonyk.CommandsBungee.Main;
 import com.thetonyk.CommandsBungee.Utils.PlayerUtils;
+import com.thetonyk.CommandsBungee.Utils.PlayerUtils.Rank;
 
 import static net.md_5.bungee.api.ChatColor.*;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.TabExecutor;
 
@@ -90,6 +93,17 @@ public class ReplyCommand extends Command implements TabExecutor {
 		if (PlayerUtils.getIgnoredPlayers(Main.proxy.getProxy().getPlayer(MsgCommand.lastMsg.get(sender.getName())).getUniqueId()) != null && PlayerUtils.getIgnoredPlayers(Main.proxy.getProxy().getPlayer(MsgCommand.lastMsg.get(sender.getName())).getUniqueId()).contains(Main.proxy.getProxy().getPlayer(sender.getName()).getUniqueId())) return;
 		
 		MsgCommand.lastMsg.put(Main.proxy.getProxy().getPlayer(MsgCommand.lastMsg.get(sender.getName())).getName(), sender.getName());
+		
+		for (Entry<ProxiedPlayer, String> player : Main.socialspy.entrySet()) {
+			
+			if (player.getKey().getName().equalsIgnoreCase(sender.getName())) continue;
+			
+			if (PlayerUtils.getRank(sender.getName()) == Rank.ADMIN && PlayerUtils.getRank(player.getKey().getName()) != Rank.ADMIN) continue;
+			
+			if (!Main.proxy.getProxy().getPlayer(sender.getName()).getServer().getInfo().getName().equalsIgnoreCase(player.getValue()) && !player.getValue().equalsIgnoreCase("all")) continue;
+			player.getKey().sendMessage(new ComponentBuilder(sender.getName()).color(DARK_GREEN).append(" ⫸ ").color(DARK_GRAY).append(Main.proxy.getProxy().getPlayer(MsgCommand.lastMsg.get(sender.getName())).getName()).color(DARK_GREEN).append(": ").color(DARK_GRAY).append(message.toString()).color(GRAY).italic(true).create());
+			
+		}
 		
 		ComponentBuilder text = new ComponentBuilder("Private ").color(GOLD).append("| ").color(DARK_GRAY).append(sender.getName()).color(GRAY).append(" ⫸ ").color(GREEN).append(message.toString()).color(WHITE);
 		text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Reply to ").color(GRAY).append(sender.getName()).color(GREEN).append(".").color(GRAY).create()));

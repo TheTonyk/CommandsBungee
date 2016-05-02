@@ -108,9 +108,9 @@ public class PlayerListener implements Listener {
 			
 			for (Entry<ProxiedPlayer, String> player : Main.cmdspy.entrySet()) {
 				
-				if (player.getKey().getName() == event.getSender().toString()) continue;
+				if (player.getKey().getName().equalsIgnoreCase(event.getSender().toString())) continue;
 				
-				if (PlayerUtils.getRank(((ProxiedPlayer) event.getSender()).getName()) == Rank.ADMIN && PlayerUtils.getRank(player.getKey().getName()) != Rank.ADMIN) return;
+				if (PlayerUtils.getRank(((ProxiedPlayer) event.getSender()).getName()) == Rank.ADMIN && PlayerUtils.getRank(player.getKey().getName()) != Rank.ADMIN) continue;
 				
 				if (!Main.proxy.getProxy().getPlayer(event.getSender().toString()).getServer().getInfo().getName().equalsIgnoreCase(player.getValue()) && !player.getValue().equalsIgnoreCase("all")) continue;
 				player.getKey().sendMessage(new ComponentBuilder(event.getSender().toString()).color(DARK_BLUE).append(": ").color(DARK_GRAY).append(event.getMessage()).color(GRAY).italic(true).create());
@@ -251,6 +251,7 @@ public class PlayerListener implements Listener {
 	public void onConnect (ServerConnectedEvent event) {
 		
 		if (event.getPlayer().hasPermission("proxy.cmdspy")) Main.cmdspy.put(event.getPlayer(), event.getServer().getInfo().getName());
+		if (event.getPlayer().hasPermission("proxy.socialspy")) Main.socialspy.put(event.getPlayer(), event.getServer().getInfo().getName());
 		
 		Map<String, Integer> alts = PlayerUtils.getAlts(event.getPlayer().getUniqueId());
 		
