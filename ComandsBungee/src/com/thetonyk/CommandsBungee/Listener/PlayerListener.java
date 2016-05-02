@@ -104,7 +104,7 @@ public class PlayerListener implements Listener {
 	@EventHandler
 	public void onChat (ChatEvent event) {
 		
-		if (event.isCommand() && !event.getMessage().substring(1).startsWith("p ") && !event.getMessage().substring(1).startsWith("private ") && !event.getMessage().substring(1).startsWith("o ") && !event.getMessage().substring(1).startsWith("organize ")) {
+		if (event.isCommand() && !event.getMessage().substring(1).startsWith("p ") && !event.getMessage().substring(1).startsWith("private ") && !event.getMessage().substring(1).startsWith("o ") && !event.getMessage().substring(1).startsWith("organize ") && !event.getMessage().substring(1).startsWith("msg ") && !event.getMessage().substring(1).startsWith("tell ") && !event.getMessage().substring(1).startsWith("w ") && !event.getMessage().substring(1).startsWith("reply ") && !event.getMessage().substring(1).startsWith("r ")) {
 			
 			for (Entry<ProxiedPlayer, String> player : Main.cmdspy.entrySet()) {
 				
