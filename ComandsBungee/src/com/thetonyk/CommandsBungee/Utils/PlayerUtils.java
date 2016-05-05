@@ -69,6 +69,30 @@ public class PlayerUtils {
 		
 	}
 	
+	public static Boolean exist(UUID uuid) {
+		
+		Boolean exist = false;
+		
+		try {
+		
+			Statement sql = DatabaseUtils.getConnection().createStatement();
+			ResultSet req = sql.executeQuery("SELECT * FROM users WHERE uuid = '" + uuid.toString() + "';");
+			
+			if (req.next()) exist = true;
+				
+			sql.close();
+			req.close();
+			
+		} catch (SQLException exception) {
+			
+			Main.proxy.getLogger().severe("[PlayerUtils] Error to check if player with UUID " + uuid.toString() + " is new.");
+			
+		}
+		
+		return exist;
+		
+	}
+	
 	public static int getId (String name) {
 		
 		int id = 0;
@@ -178,7 +202,7 @@ public class PlayerUtils {
 			if (req.next()) {
 				
 				if (!req.getString("name").equalsIgnoreCase(player)) Main.newPseudo.put(uuid, req.getString("name"));
-			
+				
 				for (String playerIP : req.getString("ip").split(";")) {
 					
 					if (playerIP.equalsIgnoreCase(ip)) newIP = false;
@@ -202,7 +226,7 @@ public class PlayerUtils {
 			
 			Statement sql = DatabaseUtils.getConnection().createStatement();
 			
-			sql.executeUpdate("UPDATE users SET name = '" + player + "'" + (newIP ? ", ip = '" + oldIPs + ip + ";' " : " ") + "WHERE uuid = '" + uuid + "';");
+			sql.executeUpdate("UPDATE users SET name = '" + player + "'" + (newIP ? ", ip = '" + oldIPs + ip + ";' " : "") + " WHERE uuid = '" + uuid + "';");
 			
 			sql.close();
 				

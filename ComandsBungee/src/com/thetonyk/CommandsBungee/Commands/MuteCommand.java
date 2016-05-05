@@ -34,7 +34,7 @@ public class MuteCommand extends Command implements TabExecutor {
 		
 		String player = null;
 		long duration = 0;
-		Reasons reason = null;
+		MuteCommand.Reasons reason = null;
 		
 		if (!sender.hasPermission("proxy.mute")) {
 			
@@ -76,7 +76,7 @@ public class MuteCommand extends Command implements TabExecutor {
 			sender.sendMessage(Main.prefix().append("Mute of '").color(GRAY).append(args[0]).color(GOLD).append("'...").color(GRAY).create());
 			sender.sendMessage(Main.prefix().append("Choose the reason: ").color(GRAY).append("(").color(DARK_GRAY).append("Click on it").color(GRAY).append(")").color(DARK_GRAY).create());
 	        
-	        for (Reasons reasons : Reasons.values()) {
+	        for (MuteCommand.Reasons reasons : MuteCommand.Reasons.values()) {
 	        	
 	        	ComponentBuilder text = new ComponentBuilder("⫸ ").color(DARK_GRAY).append(reasons.getName()).color(GOLD).italic(true);
 	        	text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to choose.").color(GRAY).create()));
@@ -89,11 +89,11 @@ public class MuteCommand extends Command implements TabExecutor {
 			
 		}
 		
-		Reasons reasons = Reasons.SPAM;
+		MuteCommand.Reasons reasons = Reasons.SPAM;
 		
 		try {
 			
-			reasons = Reasons.valueOf(args[1].toUpperCase());
+			reasons = MuteCommand.Reasons.valueOf(args[1].toUpperCase());
 			
 		} catch (Exception e) {
 			
@@ -180,16 +180,6 @@ public class MuteCommand extends Command implements TabExecutor {
 		for (ProxiedPlayer serverPlayer : Main.proxy.getProxy().getPlayer(sender.getName()).getServer().getInfo().getPlayers()) {
 		
 			serverPlayer.sendMessage(Main.prefix().append("'").color(GRAY).append(player).color(GOLD).append("' was muted for ").color(GRAY).append(reason.getName()).color(GOLD).append(" (").color(DARK_GRAY).append(durationString).color(GREEN).append(")").color(DARK_GRAY).create());
-			
-		}
-		
-		if (Main.proxy.getProxy().getPlayer(player) != null) {
-		
-			for (ProxiedPlayer serverPlayer : Main.proxy.getProxy().getPlayer(player).getServer().getInfo().getPlayers()) {
-				
-				serverPlayer.sendMessage(Main.prefix().append("'").color(GRAY).append(player).color(GOLD).append("' was muted for ").color(GRAY).append(reason.getName()).color(GOLD).append(" (").color(DARK_GRAY).append(durationString).color(GREEN).append(")").color(DARK_GRAY).create());
-				
-			}
 			
 		}
 		

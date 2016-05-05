@@ -38,7 +38,7 @@ public class PlayerListener implements Listener {
 		
 		int version = event.getResponse().getVersion().getProtocol();
 		ComponentBuilder text = new ComponentBuilder("                    §6§k|||§r §a§lCommandsPVP §r§6§k|||§r\n§a⫸       §61.8 §7& §61.9 §7Arenas §a| §7Follow §b@CommandsPVP      §a⫷");
-		if (event.getConnection().getVirtualHost().getHostName().equalsIgnoreCase("92.222.234.237")) text = new ComponentBuilder("                    §6§k|||§r §a§lCommandsPVP §r§6§k|||§r\n§a⫸       §6UHC §7coming soon §a| §7Follow §b@CommandsPVP      §a⫷");
+		if (event.getConnection().getVirtualHost().getHostName().equalsIgnoreCase("92.222.234.237") || event.getConnection().getVirtualHost().getHostName().equalsIgnoreCase("uhc.commandspvp.com")) text = new ComponentBuilder("                    §6§k|||§r §a§lCommandsPVP §r§6§k|||§r\n§a⫸       §6UHC §7coming soon §a| §7Follow §b@CommandsPVP      §a⫷");
 		ServerPing.Protocol protocol;
 		
 		if (version == 47 || version == 107 || version == 108 || version == 109) {
@@ -58,7 +58,7 @@ public class PlayerListener implements Listener {
 		playersList[2] = new ServerPing.PlayerInfo(" ", UUID.randomUUID());
 		
 		int count = Main.proxy.getProxy().getOnlineCount();
-		if (event.getConnection().getVirtualHost().getHostName().equalsIgnoreCase("92.222.234.237")) count = Main.proxy.getProxy().getServerInfo("uhc").getPlayers().size();
+		if (event.getConnection().getVirtualHost().getHostName().equalsIgnoreCase("92.222.234.237") || event.getConnection().getVirtualHost().getHostName().equalsIgnoreCase("uhc.commandspvp.com")) count = Main.proxy.getProxy().getServerInfo("uhc").getPlayers().size();
 		
 		ServerPing.Players players = new ServerPing.Players(250, count, playersList);
 		
@@ -297,7 +297,7 @@ public class PlayerListener implements Listener {
 	@EventHandler
 	public void onLogin (LoginEvent event) {		
 		
-		if (!PlayerUtils.exist(event.getConnection().getName())) return;
+		if (!PlayerUtils.exist(event.getConnection().getUniqueId())) return;
 		
 		PlayerUtils.preJoinUpdatePlayer(event.getConnection().getName(), event.getConnection().getUniqueId(), event.getConnection().getAddress().getAddress().getHostAddress());
 		

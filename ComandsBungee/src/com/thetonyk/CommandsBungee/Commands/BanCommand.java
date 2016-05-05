@@ -36,7 +36,7 @@ public class BanCommand extends Command implements TabExecutor {
 		
 		String player = null;
 		long duration = 0;
-		Reasons reason = null;
+		BanCommand.Reasons reason = null;
 		
 		if (!sender.hasPermission("proxy.ban")) {
 			
@@ -78,7 +78,7 @@ public class BanCommand extends Command implements TabExecutor {
 			sender.sendMessage(Main.prefix().append("Ban of '").color(GRAY).append(args[0]).color(GOLD).append("'...").color(GRAY).create());
 			sender.sendMessage(Main.prefix().append("Choose the reason: ").color(GRAY).append("(").color(DARK_GRAY).append("Click on it").color(GRAY).append(")").color(DARK_GRAY).create());
 	        
-	        for (Reasons reasons : Reasons.values()) {
+	        for (BanCommand.Reasons reasons : BanCommand.Reasons.values()) {
 	        	
 	        	ComponentBuilder text = new ComponentBuilder("⫸ ").color(DARK_GRAY).append(reasons.getName()).color(GOLD).italic(true);
 	        	text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to choose.").color(GRAY).create()));
@@ -91,11 +91,11 @@ public class BanCommand extends Command implements TabExecutor {
 			
 		}
 		
-		Reasons reasons = Reasons.OTHERS;
+		BanCommand.Reasons reasons = null;
 		
 		try {
 			
-			reasons = Reasons.valueOf(args[1].toUpperCase());
+			reasons = BanCommand.Reasons.valueOf(args[1].toUpperCase());
 			
 		} catch (Exception exception) {
 			
@@ -229,16 +229,6 @@ public class BanCommand extends Command implements TabExecutor {
 		for (ProxiedPlayer serverPlayer : Main.proxy.getProxy().getPlayer(sender.getName()).getServer().getInfo().getPlayers()) {
 		
 			serverPlayer.sendMessage(message.create());
-			
-		}
-		
-		if (Main.proxy.getProxy().getPlayer(player) != null) {
-			
-			for (ProxiedPlayer serverPlayer : Main.proxy.getProxy().getPlayer(player).getServer().getInfo().getPlayers()) {
-				
-				serverPlayer.sendMessage(message.create());
-				
-			}
 			
 		}
 		

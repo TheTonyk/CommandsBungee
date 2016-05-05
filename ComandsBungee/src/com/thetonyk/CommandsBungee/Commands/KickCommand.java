@@ -67,7 +67,7 @@ public class KickCommand extends Command implements TabExecutor {
 			sender.sendMessage(Main.prefix().append("Kick of '").color(GRAY).append(args[0]).color(GOLD).append("'...").color(GRAY).create());
 			sender.sendMessage(Main.prefix().append("Choose the reason: ").color(GRAY).append("(").color(DARK_GRAY).append("Click on it").color(GRAY).append(")").color(DARK_GRAY).create());
 	        
-	        for (Reasons reasons : Reasons.values()) {
+	        for (KickCommand.Reasons reasons : KickCommand.Reasons.values()) {
 	        	
 	        	ComponentBuilder text = new ComponentBuilder("⫸ ").color(DARK_GRAY).append(reasons.getName()).color(GOLD).italic(true);
 	        	text.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to choose.").color(GRAY).create()));
@@ -80,11 +80,11 @@ public class KickCommand extends Command implements TabExecutor {
 			
 		}
 		
-		Reasons reasons = null;
+		KickCommand.Reasons reasons = null;
 		
 		try {
 			
-			reasons = Reasons.valueOf(args[1].toUpperCase());
+			reasons = KickCommand.Reasons.valueOf(args[1].toUpperCase());
 			
 		} catch (Exception e) {
 			
