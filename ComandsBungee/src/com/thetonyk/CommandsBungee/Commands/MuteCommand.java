@@ -177,11 +177,13 @@ public class MuteCommand extends Command implements TabExecutor {
 		
 		String durationString = args[2].replaceAll("m", " minutes").replaceAll("h", " hours").replaceAll("d", " days");
 			
-		for (ProxiedPlayer serverPlayer : Main.proxy.getProxy().getPlayer(sender.getName()).getServer().getInfo().getPlayers()) {
+		for (ProxiedPlayer serverPlayer : Main.proxy.getProxy().getPlayer(player).getServer().getInfo().getPlayers()) {
 		
 			serverPlayer.sendMessage(Main.prefix().append("'").color(GRAY).append(player).color(GOLD).append("' was muted for ").color(GRAY).append(reason.getName()).color(GOLD).append(" (").color(DARK_GRAY).append(durationString).color(GREEN).append(")").color(DARK_GRAY).create());
 			
 		}
+		
+		if (!Main.proxy.getProxy().getPlayer(sender.getName()).getServer().getInfo().getName().equalsIgnoreCase(Main.proxy.getProxy().getPlayer(player).getServer().getInfo().getName())) sender.sendMessage(Main.prefix().append("'").color(GRAY).append(player).color(GOLD).append("' was muted for ").color(GRAY).append(reason.getName()).color(GOLD).append(" (").color(DARK_GRAY).append(durationString).color(GREEN).append(")").color(DARK_GRAY).create());
 		
 	}
 	

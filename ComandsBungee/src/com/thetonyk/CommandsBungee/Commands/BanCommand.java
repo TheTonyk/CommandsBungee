@@ -226,11 +226,13 @@ public class BanCommand extends Command implements TabExecutor {
 			
 		} else message.append(".").color(GRAY);
 		
-		for (ProxiedPlayer serverPlayer : Main.proxy.getProxy().getPlayer(sender.getName()).getServer().getInfo().getPlayers()) {
+		for (ProxiedPlayer serverPlayer : Main.proxy.getProxy().getPlayer(player).getServer().getInfo().getPlayers()) {
 		
 			serverPlayer.sendMessage(message.create());
 			
 		}
+		
+		if (!Main.proxy.getProxy().getPlayer(sender.getName()).getServer().getInfo().getName().equalsIgnoreCase(Main.proxy.getProxy().getPlayer(player).getServer().getInfo().getName())) sender.sendMessage(message.create());
 		
 	}
 	

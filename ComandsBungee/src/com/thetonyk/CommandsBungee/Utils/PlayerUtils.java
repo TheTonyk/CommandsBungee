@@ -247,7 +247,7 @@ public class PlayerUtils {
 				Statement sql = DatabaseUtils.getConnection().createStatement();
 				
 				sql.executeUpdate("INSERT INTO users (`name`, `uuid`, `ip`, `firstJoin`, `lastJoin`, `lastQuit`, `rank`, `muteState`, `muteReason`, `muteTime`) VALUES ('" + player + "', '" + uuid + "', '" + ip + ";', '" + new Date().getTime() + "', '" + new Date().getTime() + "', '0', 'PLAYER', false, '0', '-1');");
-				sql.executeUpdate("INSERT INTO settings (`id`, `players`, `chat`, `mentions`, `private`, `ignored`) VALUES ('" + PlayerUtils.getId(uuid) + "', 1, 1, 1, 1, '');");
+				sql.executeUpdate("INSERT INTO settings (`id`, `players`, `chat`, `mentions`, `private`, `ignored`, `nosound`) VALUES ('" + PlayerUtils.getId(uuid) + "', 1, 1, 1, 1, '', 0);");
 				
 				sql.close();
 				
