@@ -1,13 +1,14 @@
 package com.thetonyk.CommandsBungee.Commands;
 
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import com.thetonyk.CommandsBungee.Main;
 import com.thetonyk.CommandsBungee.Utils.DatabaseUtils;
 import com.thetonyk.CommandsBungee.Utils.DateUtils;
@@ -183,20 +184,27 @@ public class BanCommand extends Command implements TabExecutor {
 			
 		}
 		
-		try {
+		DatabaseUtils.sqlInsert("INSERT INTO bans (`player`, `date`, `duration`, `operator`, `reason`, `server`, `cancel`) VALUES ('" + PlayerUtils.getId(player) + "', '" + new Date().getTime() + "', '" + duration + "', '" + PlayerUtils.getId(sender.getName()) + "', '" + reason.toString().toLowerCase() + "', '" + (Main.proxy.getProxy().getPlayer(player) == null ? "none" : Main.proxy.getProxy().getPlayer(player).getServer().getInfo().getName()) + "', 0);");
+		
+		List<String> servers = PlayerUtils.inUHC(PlayerUtils.getUUID(player));
+		
+		if (!servers.isEmpty()) {
+		
+			for (String server : servers) {
 			
-			Statement sql = DatabaseUtils.getConnection().createStatement();
-			sql.executeUpdate("INSERT INTO bans (`player`, `date`, `duration`, `operator`, `reason`, `server`, `cancel`) VALUES ('" + PlayerUtils.getId(player) + "', '" + new Date().getTime() + "', '" + duration + "', '" + PlayerUtils.getId(sender.getName()) + "', '" + reason.toString().toLowerCase() + "', '" + (Main.proxy.getProxy().getPlayer(player) == null ? "none" : Main.proxy.getProxy().getPlayer(player).getServer().getInfo().getName()) + "', 0);");
-			sql.close();
-			
-		} catch (SQLException exception) {
-			
-			Main.proxy.getLogger().severe("[BanCommand] Error to insert new ban of player " + player + ".");
-			sender.sendMessage(Main.prefix().append("Error to ban the player.").color(GRAY).create());
-			return;
-			
+				ByteArrayDataOutput out = ByteStreams.newDataOutput();
+				
+				out.writeUTF("Ban");
+				out.writeUTF(PlayerUtils.getUUID(player).toString());
+				
+				Main.proxy.getProxy().getServerInfo(server).sendData("CommandsBungee", out.toByteArray());
+				
+			}
+		
 		}
 		
+		ProxiedPlayer online = Main.proxy.getProxy().getPlayer(player);
+		Collection<ProxiedPlayer> onlines = Main.proxy.getProxy().getPlayer(player).getServer().getInfo().getPlayers();
 		ComponentBuilder message = new ComponentBuilder("⫸ ").color(DARK_GRAY).append("You are ").color(GRAY).append("banned ").color(GOLD).append("from ").color(GRAY).append("CommandsPVP ").color(GREEN).append("⫷").color(DARK_GRAY).append("\n\nReason ").color(GOLD).append("⫸ ").color(DARK_GRAY).append(reason.getName()).color(GRAY);
 		SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy HH:mm");
 		format.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -205,11 +213,15 @@ public class BanCommand extends Command implements TabExecutor {
 		
 		message.append("\n\n⫸ ").color(DARK_GRAY).append("To appeal, contact us on Twitter ").color(GRAY).append("@CommandsPVP ").color(AQUA).append("⫷").color(DARK_GRAY);
 		
-		if (Main.proxy.getProxy().getPlayer(player) != null) Main.proxy.getProxy().getPlayer(player).disconnect(message.create());
+		if (online != null) online.disconnect(message.create());
 		
 		for (String alt : PlayerUtils.getAlts(PlayerUtils.getUUID(player)).keySet()) {
 			
-			if (Main.proxy.getProxy().getPlayer(alt) != null) Main.proxy.getProxy().getPlayer(alt).disconnect(new ComponentBuilder("⫸ ").color(DARK_GRAY).append("You are ").color(GRAY).append("IP banned ").color(GOLD).append("from ").color(GRAY).append("CommandsPVP ").color(GREEN).append("⫷").color(DARK_GRAY).append("\n\nDue to account(s) ").color(GOLD).append("⫸ ").color(DARK_GRAY).append(player).color(GRAY).append("\n\n⫸ ").color(DARK_GRAY).append("To appeal, contact us on Twitter ").color(GRAY).append("@CommandsPVP ").color(AQUA).append("⫷").color(DARK_GRAY).create());
+			ProxiedPlayer onlineAlt = Main.proxy.getProxy().getPlayer(alt);
+			
+			if (PlayerUtils.getRank(alt) == Rank.ADMIN) continue;
+			
+			if (onlineAlt != null) onlineAlt.disconnect(new ComponentBuilder("⫸ ").color(DARK_GRAY).append("You are ").color(GRAY).append("IP banned ").color(GOLD).append("from ").color(GRAY).append("CommandsPVP ").color(GREEN).append("⫷").color(DARK_GRAY).append("\n\nDue to account(s) ").color(GOLD).append("⫸ ").color(DARK_GRAY).append(player).color(GRAY).append("\n\n⫸ ").color(DARK_GRAY).append("To appeal, contact us on Twitter ").color(GRAY).append("@CommandsPVP ").color(AQUA).append("⫷").color(DARK_GRAY).create());
 			
 		}
 		
@@ -226,13 +238,13 @@ public class BanCommand extends Command implements TabExecutor {
 			
 		} else message.append(".").color(GRAY);
 		
-		for (ProxiedPlayer serverPlayer : Main.proxy.getProxy().getPlayer(player).getServer().getInfo().getPlayers()) {
+		for (ProxiedPlayer serverPlayer : onlines) {
 		
 			serverPlayer.sendMessage(message.create());
 			
 		}
 		
-		if (!Main.proxy.getProxy().getPlayer(sender.getName()).getServer().getInfo().getName().equalsIgnoreCase(Main.proxy.getProxy().getPlayer(player).getServer().getInfo().getName())) sender.sendMessage(message.create());
+		if (!Main.proxy.getProxy().getPlayer(sender.getName()).getServer().getInfo().getName().equalsIgnoreCase(online.getServer().getInfo().getName())) sender.sendMessage(message.create());
 		
 	}
 	
@@ -283,7 +295,7 @@ public class BanCommand extends Command implements TabExecutor {
 	
 	public static enum Reasons {
 		
-		FORCEFIELD("Forcefield, Aimbot", "Forcefield", false), FLY("Speedhack, Flyhack", "Speed/Fly", false), OTHERS("Autoclick or others hacks", "Other hack", false), TEAM("Teaming in FFA", "Teaming", true), LANGUAGE("Bad language and/or spam", "Chat Rules", true), ALT ("Alt Account for evading", "Alt", true);
+		FORCEFIELD("Forcefield, Aimbot", "Forcefield", false), FLY("Speedhack, Flyhack", "Speed/Fly", false), XRAY("Xray, Cave Finder", "Xray", false), OTHERS("Autoclick or others hacks", "Other hack", false), TEAM("Teaming in FFA", "Teaming", true), LANGUAGE("Bad language and/or spam", "Chat Rules", true), ALT ("Alt Account for evading", "Alt", true);
 	
 		private String name;
 		private String shortName;

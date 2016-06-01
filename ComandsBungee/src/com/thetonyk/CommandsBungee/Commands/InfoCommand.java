@@ -1,4 +1,3 @@
-
 package com.thetonyk.CommandsBungee.Commands;
 
 import java.sql.ResultSet;
@@ -108,15 +107,23 @@ public class InfoCommand extends Command implements TabExecutor {
 		if (PlayerUtils.isBanned(uuid) == 0) banned.append("Not currently").color(RED);
 		else {
 			
-			long duration = (PlayerUtils.getBanDuration(PlayerUtils.isBanned(uuid)) - (new Date().getTime() - PlayerUtils.getBanDate(PlayerUtils.isBanned(uuid))));
-			long days = TimeUnit.MILLISECONDS.toDays(duration); 
-			long hours = TimeUnit.MILLISECONDS.toHours(duration) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(duration)); 
-			long minutes = TimeUnit.MILLISECONDS.toMinutes(duration) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(duration));
+			if (PlayerUtils.getBanDuration(PlayerUtils.isBanned(uuid)) < 0) {
+				
+				banned.append("Lifetime").color(GREEN);
+				
+			} else {
 			
-			if (days > 0) banned.append(String.valueOf(days)).color(GREEN).append("d, ").color(GRAY);
-			if (hours > 0) banned.append(String.valueOf(hours)).color(GREEN).append("h, ").color(GRAY);
-			if (minutes > 0) banned.append(String.valueOf(minutes)).color(GREEN).append("m.").color(GRAY);
-			else banned.append("0").color(GREEN).append("m.").color(GRAY);
+				long duration = (PlayerUtils.getBanDuration(PlayerUtils.isBanned(uuid)) - (new Date().getTime() - PlayerUtils.getBanDate(PlayerUtils.isBanned(uuid))));
+				long days = TimeUnit.MILLISECONDS.toDays(duration); 
+				long hours = TimeUnit.MILLISECONDS.toHours(duration) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(duration)); 
+				long minutes = TimeUnit.MILLISECONDS.toMinutes(duration) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(duration));
+				
+				if (days > 0) banned.append(String.valueOf(days)).color(GREEN).append("d, ").color(GRAY);
+				if (hours > 0) banned.append(String.valueOf(hours)).color(GREEN).append("h, ").color(GRAY);
+				if (minutes > 0) banned.append(String.valueOf(minutes)).color(GREEN).append("m.").color(GRAY);
+				else banned.append("0").color(GREEN).append("m.").color(GRAY);
+			
+			}
 			
 		}
 		
@@ -125,16 +132,24 @@ public class InfoCommand extends Command implements TabExecutor {
 		if (PlayerUtils.isMuted(uuid) == 0) muted.append("Not currently").color(RED);
 		else {
 			
-			long duration = (PlayerUtils.getMuteDuration(PlayerUtils.isMuted(uuid)) - (new Date().getTime() - PlayerUtils.getMuteDate(PlayerUtils.isMuted(uuid))));
-			long days = TimeUnit.MILLISECONDS.toDays(duration); 
-			long hours = TimeUnit.MILLISECONDS.toHours(duration) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(duration)); 
-			long minutes = TimeUnit.MILLISECONDS.toMinutes(duration) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(duration));
-			long seconds = TimeUnit.MILLISECONDS.toSeconds(duration) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration));
+			if (PlayerUtils.getMuteDuration(PlayerUtils.isMuted(uuid)) < 0) {
+				
+				muted.append("Lifetime").color(GREEN);
+				
+			} else {
 			
-			if (days > 0) muted.append(String.valueOf(days)).color(GREEN).append("d, ").color(GRAY);
-			if (hours > 0) muted.append(String.valueOf(hours)).color(GREEN).append("h, ").color(GRAY);
-			if (minutes > 0) muted.append(String.valueOf(minutes)).color(GREEN).append("m, ").color(GRAY);
-			muted.append(String.valueOf(seconds)).color(GREEN).append("s.").color(GRAY);
+				long duration = (PlayerUtils.getMuteDuration(PlayerUtils.isMuted(uuid)) - (new Date().getTime() - PlayerUtils.getMuteDate(PlayerUtils.isMuted(uuid))));
+				long days = TimeUnit.MILLISECONDS.toDays(duration); 
+				long hours = TimeUnit.MILLISECONDS.toHours(duration) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(duration)); 
+				long minutes = TimeUnit.MILLISECONDS.toMinutes(duration) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(duration));
+				long seconds = TimeUnit.MILLISECONDS.toSeconds(duration) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(duration));
+				
+				if (days > 0) muted.append(String.valueOf(days)).color(GREEN).append("d, ").color(GRAY);
+				if (hours > 0) muted.append(String.valueOf(hours)).color(GREEN).append("h, ").color(GRAY);
+				if (minutes > 0) muted.append(String.valueOf(minutes)).color(GREEN).append("m, ").color(GRAY);
+				muted.append(String.valueOf(seconds)).color(GREEN).append("s.").color(GRAY);
+			
+			}
 			
 		}
 		

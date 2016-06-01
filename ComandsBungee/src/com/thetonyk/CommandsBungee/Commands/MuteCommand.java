@@ -1,7 +1,5 @@
 package com.thetonyk.CommandsBungee.Commands;
 
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -161,19 +159,7 @@ public class MuteCommand extends Command implements TabExecutor {
 			
 		}
 		
-		try {
-			
-			Statement sql = DatabaseUtils.getConnection().createStatement();
-			sql.executeUpdate("INSERT INTO mute (`player`, `date`, `duration`, `operator`, `reason`, `server`, `cancel`) VALUES ('" + PlayerUtils.getId(player) + "', '" + new Date().getTime() + "', '" + duration + "', '" + PlayerUtils.getId(sender.getName()) + "', '" + reason.toString().toLowerCase() + "', '" + (Main.proxy.getProxy().getPlayer(player) == null ? "none" : Main.proxy.getProxy().getPlayer(player).getServer().getInfo().getName()) + "', 0);");
-			sql.close();
-			
-		} catch (SQLException e) {
-			
-			Main.proxy.getLogger().severe("[MuteCommand] Error to insert new mute of player " + player + ".");
-			sender.sendMessage(Main.prefix().append("Error to mute the player.").color(GRAY).create());
-			return;
-			
-		}
+		DatabaseUtils.sqlInsert("INSERT INTO mute (`player`, `date`, `duration`, `operator`, `reason`, `server`, `cancel`) VALUES ('" + PlayerUtils.getId(player) + "', '" + new Date().getTime() + "', '" + duration + "', '" + PlayerUtils.getId(sender.getName()) + "', '" + reason.toString().toLowerCase() + "', '" + (Main.proxy.getProxy().getPlayer(player) == null ? "none" : Main.proxy.getProxy().getPlayer(player).getServer().getInfo().getName()) + "', 0);");
 		
 		String durationString = args[2].replaceAll("m", " minutes").replaceAll("h", " hours").replaceAll("d", " days");
 			

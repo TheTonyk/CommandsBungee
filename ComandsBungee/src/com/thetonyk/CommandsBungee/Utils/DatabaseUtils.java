@@ -29,6 +29,28 @@ public class DatabaseUtils {
         return connection;
         
     }
+    
+    public static void sqlInsert (String request) {
+    	
+    	Main.proxy.getProxy().getScheduler().runAsync(Main.proxy, new Runnable() {
+			
+			public void run() {
+				
+				try {
+		    		
+		    		DatabaseUtils.getConnection().createStatement().executeUpdate(request);
+		    		
+		    	} catch (SQLException exception) {
+		    		
+		    		return;
+		    		
+		    	}
+				
+			}
+			
+		});
+
+    }
 
 }
 

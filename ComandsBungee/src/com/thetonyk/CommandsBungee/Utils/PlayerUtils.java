@@ -222,19 +222,7 @@ public class PlayerUtils {
 			
 		}
 		
-		try {
-			
-			Statement sql = DatabaseUtils.getConnection().createStatement();
-			
-			sql.executeUpdate("UPDATE users SET name = '" + player + "'" + (newIP ? ", ip = '" + oldIPs + ip + ";' " : "") + " WHERE uuid = '" + uuid + "';");
-			
-			sql.close();
-				
-		} catch (SQLException exception) {
-			
-			Main.proxy.getLogger().severe("[PlayerUtils] Error to update player " + player + ".");
-			
-		}
+		DatabaseUtils.sqlInsert("UPDATE users SET name = '" + player + "'" + (newIP ? ", ip = '" + oldIPs + ip + ";' " : "") + " WHERE uuid = '" + uuid + "';");
 
 	}
 	
@@ -242,36 +230,12 @@ public class PlayerUtils {
 		
 		if (!exist(Main.proxy.getProxy().getPlayer(uuid))) {
 			
-			try {
-				
-				Statement sql = DatabaseUtils.getConnection().createStatement();
-				
-				sql.executeUpdate("INSERT INTO users (`name`, `uuid`, `ip`, `firstJoin`, `lastJoin`, `lastQuit`, `rank`, `muteState`, `muteReason`, `muteTime`) VALUES ('" + player + "', '" + uuid + "', '" + ip + ";', '" + new Date().getTime() + "', '" + new Date().getTime() + "', '0', 'PLAYER', false, '0', '-1');");
-				sql.executeUpdate("INSERT INTO settings (`id`, `players`, `chat`, `mentions`, `private`, `ignored`, `nosound`) VALUES ('" + PlayerUtils.getId(uuid) + "', 1, 1, 1, 1, '', 0);");
-				
-				sql.close();
-				
-			} catch (SQLException exception) {
-				
-				Main.proxy.getLogger().severe("[PlayerUtils] Error to insert new player " + player + ".");
-				
-			}
+			DatabaseUtils.sqlInsert("INSERT INTO users (`name`, `uuid`, `ip`, `firstJoin`, `lastJoin`, `lastQuit`, `rank`, `muteState`, `muteReason`, `muteTime`) VALUES ('" + player + "', '" + uuid + "', '" + ip + ";', '" + new Date().getTime() + "', '" + new Date().getTime() + "', '0', 'PLAYER', false, '0', '-1');");
+			DatabaseUtils.sqlInsert("INSERT INTO settings (`id`, `players`, `chat`, `mentions`, `private`, `ignored`, `nosound`) VALUES ('" + PlayerUtils.getId(uuid) + "', 1, 1, 1, 1, '', 0);");
 			
 		} else {
 			
-			try {
-				
-				Statement sql = DatabaseUtils.getConnection().createStatement();
-				
-				sql.executeUpdate("UPDATE users SET lastJoin = '" + new Date().getTime() + "' WHERE uuid = '" + uuid + "';");
-					
-				sql.close();
-					
-			} catch (SQLException exception) {
-				
-				Main.proxy.getLogger().severe("[PlayerUtils] Error to update player " + player + ".");
-				
-			}
+			DatabaseUtils.sqlInsert("UPDATE users SET lastJoin = '" + new Date().getTime() + "' WHERE uuid = '" + uuid + "';");
 			
 		}
 		
@@ -279,19 +243,7 @@ public class PlayerUtils {
 	
 	public static void leaveUpdatePlayer(ProxiedPlayer player) {
 		
-		try {
-			
-			Statement sql = DatabaseUtils.getConnection().createStatement();
-			
-			sql.executeUpdate("UPDATE users SET lastQuit = '" + new Date().getTime() + "' WHERE uuid = '" + player.getUniqueId().toString() + "';");
-			
-			sql.close();
-		
-		} catch (SQLException exception) {
-			
-			Main.proxy.getLogger().severe("[PlayerUtils] Error to update player " + player.getName() + ".");
-			
-		}
+		DatabaseUtils.sqlInsert("UPDATE users SET lastQuit = '" + new Date().getTime() + "' WHERE uuid = '" + player.getUniqueId().toString() + "';");
 		
 	}
 	
@@ -563,17 +515,39 @@ public class PlayerUtils {
 		Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 		String ignored = gson.toJson(ignoredPlayers);
 		
+		DatabaseUtils.sqlInsert("UPDATE settings SET ignored = '" + ignored + "' WHERE id = " + PlayerUtils.getId(player) + ";");
+		
+	}
+	
+	public static List<String> inUHC (UUID player) {
+		
+		List<String> server = new ArrayList<String>();
+		
 		try {
 			
 			Statement sql = DatabaseUtils.getConnection().createStatement();
-			sql.executeUpdate("UPDATE settings SET ignored = '" + ignored + "' WHERE id = " + PlayerUtils.getId(player) + ";");
+			ResultSet req = sql.executeQuery("SELECT * FROM uhc;");
+			
+			while (req.next()) {
+				
+				if (req.getString("players") == "") continue;
+				
+				Map<UUID, Map<String, String>> players = new Gson().fromJson(req.getString("players"), new TypeToken<Map<UUID, Map<String, String>>>(){}.getType());
+				
+				if (players.containsKey(player)) server.add(req.getString("server"));
+				
+			}
+			
 			sql.close();
+			req.close();
 			
 		} catch (SQLException exception) {
 			
-			Main.proxy.getLogger().severe("[PlayerUtils] Error to set ignored players of player with UUID " + player + ".");
+			Main.proxy.getLogger().severe("[Game] Error to get players of the uhc.");
 			
 		}
+		
+		return server;
 		
 	}
 	
@@ -845,17 +819,7 @@ public class PlayerUtils {
 	
 	public static void cancelBan (int id, int sender) {
 		
-		try {
-			
-			Statement sql = DatabaseUtils.getConnection().createStatement();
-			sql.executeUpdate("UPDATE bans SET cancel = " + sender + " WHERE id = " + id + ";");
-			sql.close();
-			
-		} catch (SQLException exception) {
-			
-			Main.proxy.getLogger().severe("[PlayerUtils] Error to cancel the ban with id " + id + ".");
-			
-		}
+		DatabaseUtils.sqlInsert("UPDATE bans SET cancel = " + sender + " WHERE id = " + id + ";");
 		
 	}
 	
@@ -1030,17 +994,7 @@ public class PlayerUtils {
 	
 	public static void cancelMute (int id, int sender) {
 		
-		try {
-			
-			Statement sql = DatabaseUtils.getConnection().createStatement();
-			sql.executeUpdate("UPDATE mute SET cancel = " + sender + " WHERE id = " + id + ";");
-			sql.close();
-			
-		} catch (SQLException exception) {
-			
-			Main.proxy.getLogger().severe("[PlayerUtils] Error to cancel the mute with id " + id + ".");
-			
-		}
+		DatabaseUtils.sqlInsert("UPDATE mute SET cancel = " + sender + " WHERE id = " + id + ";");
 		
 	}
 	

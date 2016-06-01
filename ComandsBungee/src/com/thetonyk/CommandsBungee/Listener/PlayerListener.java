@@ -38,7 +38,7 @@ public class PlayerListener implements Listener {
 		
 		int version = event.getResponse().getVersion().getProtocol();
 		ComponentBuilder text = new ComponentBuilder("                    §6§k|||§r §a§lCommandsPVP §r§6§k|||§r\n§a⫸       §61.8 §7& §61.9 §7Arenas §a| §7Follow §b@CommandsPVP      §a⫷");
-		if (event.getConnection().getVirtualHost() != null && !event.getConnection().getVirtualHost().isUnresolved() && event.getConnection().getVirtualHost().getHostName().equalsIgnoreCase("uhc.commandspvp.com")) text = new ComponentBuilder("                    §6§k|||§r §a§lCommandsPVP §r§6§k|||§r\n§a⫸       §6UHC §7coming soon §a| §7Follow §b@CommandsPVP      §a⫷");
+		if (event.getConnection().getVirtualHost() != null && event.getConnection().getVirtualHost().getHostName().equalsIgnoreCase("uhc.commandspvp.com")) text = new ComponentBuilder("                    §6§k|||§r §a§lCommandsPVP §r§6§k|||§r\n§a⫸       §6UHC §7coming soon §a| §7Follow §b@CommandsPVP      §a⫷");
 		ServerPing.Protocol protocol;
 		
 		if (version == 47 || version == 107 || version == 108 || version == 109) {
@@ -58,7 +58,7 @@ public class PlayerListener implements Listener {
 		playersList[2] = new ServerPing.PlayerInfo(" ", UUID.randomUUID());
 		
 		int count = Main.proxy.getProxy().getOnlineCount();
-		if (event.getConnection().getVirtualHost() != null && !event.getConnection().getVirtualHost().isUnresolved() && event.getConnection().getVirtualHost().getHostName().equalsIgnoreCase("uhc.commandspvp.com")) count = Main.proxy.getProxy().getServerInfo("uhc").getPlayers().size();
+		if (event.getConnection().getVirtualHost() != null && event.getConnection().getVirtualHost().getHostName().equalsIgnoreCase("uhc.commandspvp.com")) count = Main.proxy.getProxy().getServerInfo("uhc").getPlayers().size();
 		
 		ServerPing.Players players = new ServerPing.Players(250, count, playersList);
 		
@@ -104,7 +104,16 @@ public class PlayerListener implements Listener {
 	@EventHandler
 	public void onChat (ChatEvent event) {
 		
-		if (event.isCommand() && !event.getMessage().substring(1).startsWith("p ") && !event.getMessage().substring(1).startsWith("private ") && !event.getMessage().substring(1).startsWith("o ") && !event.getMessage().substring(1).startsWith("organize ") && !event.getMessage().substring(1).startsWith("msg ") && !event.getMessage().substring(1).startsWith("tell ") && !event.getMessage().substring(1).startsWith("w ") && !event.getMessage().substring(1).startsWith("reply ") && !event.getMessage().substring(1).startsWith("r ")) {
+		if (event.isCommand() && 
+			!event.getMessage().substring(1).split(" ")[0].equalsIgnoreCase("p") && 
+			!event.getMessage().substring(1).split(" ")[0].equalsIgnoreCase("private ") && 
+			!event.getMessage().substring(1).split(" ")[0].equalsIgnoreCase("o ") && 
+			!event.getMessage().substring(1).split(" ")[0].equalsIgnoreCase("organize ") && 
+			!event.getMessage().substring(1).split(" ")[0].equalsIgnoreCase("msg ") && 
+			!event.getMessage().substring(1).split(" ")[0].equalsIgnoreCase("tell ") && 
+			!event.getMessage().substring(1).split(" ")[0].equalsIgnoreCase("w ") && 
+			!event.getMessage().substring(1).split(" ")[0].equalsIgnoreCase("reply ") && 
+			!event.getMessage().substring(1).split(" ")[0].equalsIgnoreCase("r ")) {
 			
 			for (Entry<ProxiedPlayer, String> player : Main.cmdspy.entrySet()) {
 				

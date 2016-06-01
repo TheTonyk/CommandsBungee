@@ -1,7 +1,5 @@
 package com.thetonyk.CommandsBungee.Commands;
 
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -126,23 +124,11 @@ public class KickCommand extends Command implements TabExecutor {
 		
 		if (reasons != null) {
 		
-			try {
-				
-				Statement sql = DatabaseUtils.getConnection().createStatement();
-				sql.executeUpdate("INSERT INTO kick (`player`, `date`, `operator`, `reason`, `server`) VALUES ('" + PlayerUtils.getId(player) + "', '" + new Date().getTime() + "', '" + PlayerUtils.getId(sender.getName()) + "', '" + reasons.toString().toLowerCase() + "', '" + (Main.proxy.getProxy().getPlayer(player) == null ? "none" : Main.proxy.getProxy().getPlayer(player).getServer().getInfo().getName()) + "');");
-				sql.close();
-				
-			} catch (SQLException e) {
-				
-				Main.proxy.getLogger().severe("[KickCommand] Error to insert new kick of player " + player + ".");
-				sender.sendMessage(Main.prefix().append("Error to kick the player.").color(GRAY).create());
-				return;
-				
-			}
+			DatabaseUtils.sqlInsert("INSERT INTO kick (`player`, `date`, `operator`, `reason`, `server`) VALUES ('" + PlayerUtils.getId(player) + "', '" + new Date().getTime() + "', '" + PlayerUtils.getId(sender.getName()) + "', '" + reasons.toString().toLowerCase() + "', '" + (Main.proxy.getProxy().getPlayer(player) == null ? "none" : Main.proxy.getProxy().getPlayer(player).getServer().getInfo().getName()) + "');");
 		
 		}
 		
-		if (Main.proxy.getProxy().getPlayer(player) != null) Main.proxy.getProxy().getPlayer(player).disconnect(new ComponentBuilder("⫸ ").color(DARK_GRAY).append("You are ").color(GRAY).append("kicked ").color(GOLD).append("from ").color(GRAY).append("CommandsPVP ").color(GREEN).append("⫷").color(DARK_GRAY).append("\n\nReason ").color(GOLD).append("⫸ ").color(DARK_GRAY).append(reason).color(GOLD).append("\n\n⫸ ").color(DARK_GRAY).append("This is not a ban ").color(GRAY).append("⫷").color(DARK_GRAY).create());
+		if (Main.proxy.getProxy().getPlayer(player) != null) Main.proxy.getProxy().getPlayer(player).disconnect(new ComponentBuilder("⫸ ").color(DARK_GRAY).append("You are ").color(GRAY).append("kicked ").color(GOLD).append("from ").color(GRAY).append("CommandsPVP ").color(GREEN).append("⫷").color(DARK_GRAY).append("\n\nReason ").color(GOLD).append("⫸ ").color(DARK_GRAY).append(reason).color(GRAY).append("\n\n⫸ ").color(DARK_GRAY).append("This is not a ban ").color(GRAY).append("⫷").color(DARK_GRAY).create());
 		
 	}
 	
