@@ -51,6 +51,35 @@ public class DatabaseUtils {
 		});
 
     }
+    
+    public static void sqlInsert (String request, Callback<Integer> callback) {
+    	
+    	Main.proxy.getProxy().getScheduler().runAsync(Main.proxy, new Runnable() {
+			
+			public void run() {
+				
+				try {
+		    		
+		    		callback.onSuccess(DatabaseUtils.getConnection().createStatement().executeUpdate(request));
+		    		
+		    	} catch (SQLException exception) {
+		    		
+		    		callback.onFailure(exception);
+		    		
+		    	}
+				
+			}
+			
+		});
+
+    }
+    
+    public interface Callback<T> {
+		
+		void onSuccess(T done);
+		void onFailure(Throwable cause);
+		
+	}
 
 }
 

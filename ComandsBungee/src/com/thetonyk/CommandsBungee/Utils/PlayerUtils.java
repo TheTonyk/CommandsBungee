@@ -15,6 +15,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.thetonyk.CommandsBungee.Main;
 import com.thetonyk.CommandsBungee.Utils.DatabaseUtils;
+import com.thetonyk.CommandsBungee.Utils.DatabaseUtils.Callback;
 import com.thetonyk.CommandsBungee.Utils.PlayerUtils;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -93,6 +94,30 @@ public class PlayerUtils {
 		
 	}
 	
+	public static Boolean hasSettings(UUID uuid) {
+		
+		Boolean exist = false;
+		
+		try {
+		
+			Statement sql = DatabaseUtils.getConnection().createStatement();
+			ResultSet req = sql.executeQuery("SELECT * FROM settings WHERE id = " + PlayerUtils.getId(uuid) + ";");
+			
+			if (req.next()) exist = true;
+				
+			sql.close();
+			req.close();
+			
+		} catch (SQLException exception) {
+			
+			Main.proxy.getLogger().severe("[PlayerUtils] Error to check if player with UUID " + uuid.toString() + " has settings.");
+			
+		}
+		
+		return exist;
+		
+	}
+	
 	public static int getId (String name) {
 		
 		int id = 0;
@@ -143,7 +168,7 @@ public class PlayerUtils {
 
 	public static int getPrivatesState (ProxiedPlayer player) {
 		
-		int privateState = 0;
+		int privateState = 1;
 		
 		try {
 			
@@ -230,12 +255,31 @@ public class PlayerUtils {
 		
 		if (!exist(Main.proxy.getProxy().getPlayer(uuid))) {
 			
-			DatabaseUtils.sqlInsert("INSERT INTO users (`name`, `uuid`, `ip`, `firstJoin`, `lastJoin`, `lastQuit`, `rank`, `muteState`, `muteReason`, `muteTime`) VALUES ('" + player + "', '" + uuid + "', '" + ip + ";', '" + new Date().getTime() + "', '" + new Date().getTime() + "', '0', 'PLAYER', false, '0', '-1');");
-			DatabaseUtils.sqlInsert("INSERT INTO settings (`id`, `players`, `chat`, `mentions`, `private`, `ignored`, `nosound`) VALUES ('" + PlayerUtils.getId(uuid) + "', 1, 1, 1, 1, '', 0);");
+			DatabaseUtils.sqlInsert("INSERT INTO users (`name`, `uuid`, `ip`, `firstJoin`, `lastJoin`, `lastQuit`, `rank`, `muteState`, `muteReason`, `muteTime`) VALUES ('" + player + "', '" + uuid + "', '" + ip + ";', '" + new Date().getTime() + "', '" + new Date().getTime() + "', '0', 'PLAYER', false, '0', '-1');", new Callback<Integer>() {
+				
+				public void onSuccess(Integer done) {
+					
+					DatabaseUtils.sqlInsert("INSERT INTO settings (`id`, `players`, `chat`, `mentions`, `private`, `ignored`, `nosound`) VALUES ('" + PlayerUtils.getId(uuid) + "', 1, 1, 1, 1, '', 0);");
+				
+				}
+				
+				public void onFailure(Throwable exception) {
+					
+					exception.printStackTrace();
+					
+				}
+				
+			});
 			
 		} else {
 			
 			DatabaseUtils.sqlInsert("UPDATE users SET lastJoin = '" + new Date().getTime() + "' WHERE uuid = '" + uuid + "';");
+			
+		}
+		
+		if (!hasSettings(uuid)) {
+			
+			DatabaseUtils.sqlInsert("INSERT INTO settings (`id`, `players`, `chat`, `mentions`, `private`, `ignored`, `nosound`) VALUES ('" + PlayerUtils.getId(uuid) + "', 1, 1, 1, 1, '', 0);");
 			
 		}
 		
@@ -439,7 +483,7 @@ public class PlayerUtils {
 	
 	public static int getChatVisibility (UUID player) {
 		
-		int chatVisibility = 0;
+		int chatVisibility = 1;
 		
 		try {
 			
@@ -463,7 +507,7 @@ public class PlayerUtils {
 	
 	public static int getMentionsState (UUID player) {
 		
-		int mentionsState = 0;
+		int mentionsState = 1;
 		
 		try {
 			

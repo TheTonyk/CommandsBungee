@@ -188,7 +188,7 @@ public class InfoCommand extends Command implements TabExecutor {
 			
 			ComponentBuilder message = new ComponentBuilder("⫸   ").color(DARK_GRAY).append(alt.getKey()).color(GOLD);
 			message.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/info " + alt.getKey()));
-			message.append(" (").color(DARK_GRAY).append(String.valueOf(alt.getValue())).color(GREEN).append(" IPs common").color(GRAY).append(")").color(DARK_GRAY);
+			message.append(" (").retain(FormatRetention.NONE).color(DARK_GRAY).append(String.valueOf(alt.getValue())).color(GREEN).append(" IPs common").color(GRAY).append(")").color(DARK_GRAY);
 			sender.sendMessage(message.create());
 			
 		}

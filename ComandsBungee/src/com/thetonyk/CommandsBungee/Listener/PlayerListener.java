@@ -5,9 +5,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TimeZone;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+
+import javax.imageio.ImageIO;
 
 import com.thetonyk.CommandsBungee.Main;
 import com.thetonyk.CommandsBungee.Commands.BanCommand;
@@ -17,6 +22,8 @@ import com.thetonyk.CommandsBungee.Utils.PlayerUtils;
 import com.thetonyk.CommandsBungee.Utils.PlayerUtils.Rank;
 
 import static net.md_5.bungee.api.ChatColor.*;
+
+import net.md_5.bungee.api.Favicon;
 import net.md_5.bungee.api.ServerPing;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -62,9 +69,18 @@ public class PlayerListener implements Listener {
 		
 		ServerPing.Players players = new ServerPing.Players(250, count, playersList);
 		
+		BufferedImage favicon = null;
+		
+		try {
+			favicon = ImageIO.read(new File("server-icon.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		event.getResponse().setDescriptionComponent(text.create()[0]);
 		event.getResponse().setVersion(protocol);
 		event.getResponse().setPlayers(players);
+		event.getResponse().setFavicon(Favicon.create(favicon));
 		
 	}
 	
@@ -106,14 +122,17 @@ public class PlayerListener implements Listener {
 		
 		if (event.isCommand() && 
 			!event.getMessage().substring(1).split(" ")[0].equalsIgnoreCase("p") && 
-			!event.getMessage().substring(1).split(" ")[0].equalsIgnoreCase("private ") && 
-			!event.getMessage().substring(1).split(" ")[0].equalsIgnoreCase("o ") && 
-			!event.getMessage().substring(1).split(" ")[0].equalsIgnoreCase("organize ") && 
-			!event.getMessage().substring(1).split(" ")[0].equalsIgnoreCase("msg ") && 
-			!event.getMessage().substring(1).split(" ")[0].equalsIgnoreCase("tell ") && 
-			!event.getMessage().substring(1).split(" ")[0].equalsIgnoreCase("w ") && 
-			!event.getMessage().substring(1).split(" ")[0].equalsIgnoreCase("reply ") && 
-			!event.getMessage().substring(1).split(" ")[0].equalsIgnoreCase("r ")) {
+			!event.getMessage().substring(1).split(" ")[0].equalsIgnoreCase("private") && 
+			!event.getMessage().substring(1).split(" ")[0].equalsIgnoreCase("o") && 
+			!event.getMessage().substring(1).split(" ")[0].equalsIgnoreCase("organize") && 
+			!event.getMessage().substring(1).split(" ")[0].equalsIgnoreCase("msg") && 
+			!event.getMessage().substring(1).split(" ")[0].equalsIgnoreCase("tell") && 
+			!event.getMessage().substring(1).split(" ")[0].equalsIgnoreCase("w") && 
+			!event.getMessage().substring(1).split(" ")[0].equalsIgnoreCase("reply") && 
+			!event.getMessage().substring(1).split(" ")[0].equalsIgnoreCase("r") &&
+			!event.getMessage().substring(1).split(" ")[0].equalsIgnoreCase("specchat") &&
+			!event.getMessage().substring(1).split(" ")[0].equalsIgnoreCase("sc") && 
+			!event.getMessage().substring(1).split(" ")[0].equalsIgnoreCase("s")) {
 			
 			for (Entry<ProxiedPlayer, String> player : Main.cmdspy.entrySet()) {
 				
