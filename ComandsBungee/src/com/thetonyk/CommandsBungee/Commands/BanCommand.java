@@ -17,6 +17,7 @@ import com.thetonyk.CommandsBungee.Utils.PlayerUtils.Rank;
 
 import static net.md_5.bungee.api.ChatColor.*;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -238,13 +239,15 @@ public class BanCommand extends Command implements TabExecutor {
 			
 		} else message.append(".").color(GRAY);
 		
+		BaseComponent[] finalMessage = message.create();
+		
 		for (ProxiedPlayer serverPlayer : onlines) {
 		
-			serverPlayer.sendMessage(message.create());
+			serverPlayer.sendMessage(finalMessage);
 			
 		}
 		
-		if (!Main.proxy.getProxy().getPlayer(sender.getName()).getServer().getInfo().getName().equalsIgnoreCase(online.getServer().getInfo().getName())) sender.sendMessage(message.create());
+		if (!Main.proxy.getProxy().getPlayer(sender.getName()).getServer().getInfo().getName().equalsIgnoreCase(online.getServer().getInfo().getName())) sender.sendMessage(finalMessage);
 		
 	}
 	

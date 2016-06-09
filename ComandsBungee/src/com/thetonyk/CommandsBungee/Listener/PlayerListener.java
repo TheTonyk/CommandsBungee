@@ -25,6 +25,7 @@ import static net.md_5.bungee.api.ChatColor.*;
 
 import net.md_5.bungee.api.Favicon;
 import net.md_5.bungee.api.ServerPing;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.ComponentBuilder.FormatRetention;
@@ -45,16 +46,15 @@ public class PlayerListener implements Listener {
 		
 		int version = event.getResponse().getVersion().getProtocol();
 		ComponentBuilder text = new ComponentBuilder("                    §6§k|||§r §a§lCommandsPVP §r§6§k|||§r\n§a⫸       §61.8 §7& §61.9 §7Arenas §a| §7Follow §b@CommandsPVP      §a⫷");
-		if (event.getConnection().getVirtualHost() != null && event.getConnection().getVirtualHost().getHostName().equalsIgnoreCase("uhc.commandspvp.com")) text = new ComponentBuilder("                    §6§k|||§r §a§lCommandsPVP §r§6§k|||§r\n§a⫸       §6UHC §7coming soon §a| §7Follow §b@CommandsPVP      §a⫷");
 		ServerPing.Protocol protocol;
 		
-		if (version == 47 || version == 107 || version == 108 || version == 109) {
+		if (version == 47 || version == 107 || version == 108 || version == 109 || version == 110) {
 		
 			protocol = new ServerPing.Protocol("§61.8.x §a| §61.9.x §7only", version);
 		
 		} else {
 			
-			protocol = new ServerPing.Protocol("§61.8.x §a| §61.9.x §7only", 109);
+			protocol = new ServerPing.Protocol("§61.8.x §a| §61.9.x §7only", 47);
 			
 		}
 		
@@ -65,7 +65,14 @@ public class PlayerListener implements Listener {
 		playersList[2] = new ServerPing.PlayerInfo(" ", UUID.randomUUID());
 		
 		int count = Main.proxy.getProxy().getOnlineCount();
-		if (event.getConnection().getVirtualHost() != null && event.getConnection().getVirtualHost().getHostName().equalsIgnoreCase("uhc.commandspvp.com")) count = Main.proxy.getProxy().getServerInfo("uhc").getPlayers().size();
+		
+		if (event.getConnection().getVirtualHost() != null && event.getConnection().getVirtualHost().getHostName().equalsIgnoreCase("uhc.commandspvp.com")) {
+			
+			text = new ComponentBuilder("                    §6§k|||§r §a§lCommandsPVP §r§6§k|||§r\n§a⫸       §6UHC §7coming soon §a| §7Follow §b@CommandsPVP      §a⫷");
+			count = Main.proxy.getProxy().getServerInfo("uhc").getPlayers().size();
+			protocol = new ServerPing.Protocol("§61.8.x §7only", 47);
+			
+		}
 		
 		ServerPing.Players players = new ServerPing.Players(250, count, playersList);
 		
@@ -300,21 +307,23 @@ public class PlayerListener implements Listener {
 		
 		text.append(".").retain(FormatRetention.NONE).color(GRAY);
 		
+		BaseComponent[] alert = text.create();
+		
 		for (ProxiedPlayer player : event.getServer().getInfo().getPlayers()) {
 			
 			if (!player.hasPermission("proxy.alerts")) continue;
 	
-			player.sendMessage(text.create());
+			player.sendMessage(alert);
 			
 		}
 		
 		if (Main.newPseudo.containsKey(event.getPlayer().getUniqueId())) {
 			
-			ComponentBuilder newPseudo = Main.prefix().append("'").color(GRAY).append(Main.newPseudo.get(event.getPlayer().getUniqueId())).color(GOLD).append("' changed his name for '").color(GRAY).append(event.getPlayer().getName()).color(GOLD).append("'.").color(GRAY);
+			BaseComponent[] newPseudo = Main.prefix().append("'").color(GRAY).append(Main.newPseudo.get(event.getPlayer().getUniqueId())).color(GOLD).append("' changed his name for '").color(GRAY).append(event.getPlayer().getName()).color(GOLD).append("'.").color(GRAY).create();
 			
 			for (ProxiedPlayer player : event.getServer().getInfo().getPlayers()) {
 				
-				player.sendMessage(newPseudo.create());
+				player.sendMessage(newPseudo);
 				
 			}
 			
@@ -323,7 +332,7 @@ public class PlayerListener implements Listener {
 	}
 	
 	@EventHandler
-	public void onLogin (LoginEvent event) {		
+	public void onLogin (LoginEvent event) {
 		
 		if (!PlayerUtils.exist(event.getConnection().getUniqueId())) return;
 		
