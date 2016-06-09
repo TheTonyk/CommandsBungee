@@ -48,20 +48,20 @@ public class PlayerListener implements Listener {
 		ComponentBuilder text = new ComponentBuilder("                    §6§k|||§r §a§lCommandsPVP §r§6§k|||§r\n§a⫸       §61.8 §7& §61.9 §7Arenas §a| §7Follow §b@CommandsPVP      §a⫷");
 		ServerPing.Protocol protocol;
 		
-		if (version == 47 || version == 107 || version == 108 || version == 109 || version == 110) {
+		if (version == 47 || version == 107 || version == 108 || version == 109 || version == 110 || version == 210) {
 		
-			protocol = new ServerPing.Protocol("§61.8.x §a| §61.9.x §7only", version);
+			protocol = new ServerPing.Protocol("§61.8.x §a| §61.9.x §a| §61.10.x §7only", version);
 		
 		} else {
 			
-			protocol = new ServerPing.Protocol("§61.8.x §a| §61.9.x §7only", 47);
+			protocol = new ServerPing.Protocol("§61.8.x §a| §61.9.x §a| §61.10.x §7only", 47);
 			
 		}
 		
 		ServerPing.PlayerInfo[] playersList = new ServerPing.PlayerInfo[3];
 		
 		playersList[0] = new ServerPing.PlayerInfo(" ", UUID.randomUUID());
-		playersList[1] = new ServerPing.PlayerInfo(" §7You can connect in §61.8.x §7and §61.9.x §7Minecraft versions. ", UUID.randomUUID());
+		playersList[1] = new ServerPing.PlayerInfo(" §7You can connect in §61.8.x§7, §61.9.x §7and §61.10.x §7Minecraft versions. ", UUID.randomUUID());
 		playersList[2] = new ServerPing.PlayerInfo(" ", UUID.randomUUID());
 		
 		int count = Main.proxy.getProxy().getOnlineCount();
