@@ -1,4 +1,7 @@
 # CommandsBungee
+
+## **Deprectated project, newer version: [Proxy](https://github.com/TheTonyk/Proxy)**
+
 Minecraft Server Proxy Plugin for CommandsPVP Minecraft Server. Using the BungeeCord API.
 
 This plugin is a private plugin and can only be used on CommandsPVP Minecraft Server. 
